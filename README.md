@@ -10,7 +10,7 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
 
 **run-scripts-util** reads the `runScriptsConfig` settings in your **package.son** to get a list (array) of commands to execute.
 
-Turn:
+**Turn the traditional hard-to-follow commands:**
 ```json
 "scripts": {
    "clean": "rimraf build dist",
@@ -22,7 +22,7 @@ Turn:
    "test": "mocha spec"
 },
 ```
-into:
+**into easy-to-read named groups:**
 ```json
 "runScriptsConfig": {
    "clean": [
@@ -40,9 +40,6 @@ into:
    "test": "mocha spec"
 },
 ```
-
-<img src=https://raw.githubusercontent.com/center-key/run-scripts-util/main/screenshot.png
-width=800 alt=screenshot>
 
 ## A) Setup
 Install package for node:
@@ -103,8 +100,9 @@ See the **TypeScript Declarations** at the top of [run-scripts.ts](run-scripts.t
    - 🎋 [add-dist-header](https://github.com/center-key/add-dist-header):&nbsp; _Prepend a one-line banner comment (with license notice) to distribution files_
    - 📄 [copy-file-util](https://github.com/center-key/copy-file-util):&nbsp; _Copy or rename a file with optional package version number_
    - 📂 [copy-folder-util](https://github.com/center-key/copy-folder-util):&nbsp; _Recursively copy files from one folder to another folder_
-   - 🔍 [run-scripts-util](https://github.com/center-key/run-scripts-util):&nbsp; _Find and replace strings or template outputs in text files_
+   - 🔍 [replacer-util](https://github.com/center-key/replacer-util):&nbsp; _Find and replace strings or template outputs in text files_
    - 🔢 [rev-web-assets](https://github.com/center-key/rev-web-assets):&nbsp; _Revision web asset filenames with cache busting content hash fingerprints_
+   - 🚆 [run-scripts-util](https://github.com/center-key/run-scripts-util):&nbsp; _Organize npm scripts into named groups of easy to manage commands_
    - 🚦 [w3c-html-validator](https://github.com/center-key/w3c-html-validator):&nbsp; _Check the markup validity of HTML files using the W3C validator_
 
 Feel free to submit questions at:<br>
