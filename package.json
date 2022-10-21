@@ -1,0 +1,102 @@
+{
+   "name": "run-scripts-util",
+   "version": "0.0.0",
+   "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
+   "license": "MIT",
+   "type": "module",
+   "module": "dist/run-scripts.js",
+   "main": "dist/run-scripts.umd.cjs",
+   "types": "dist/run-scripts.d.ts",
+   "files": [
+      "dist"
+   ],
+   "exports": {
+      ".": {
+         "import": "./dist/run-scripts.js",
+         "require": "./dist/run-scripts.umd.cjs"
+      },
+      "./": "./dist/"
+   },
+   "bin": {
+      "run-scripts": "bin/cli.js",
+      "run-scripts-util": "bin/cli.js"
+   },
+   "repository": "github:center-key/run-scripts-util",
+   "homepage": "https://github.com/center-key/run-scripts-util",
+   "bugs": "https://github.com/center-key/run-scripts-util/issues",
+   "docs": "https://github.com/center-key/run-scripts-util#readme",
+   "author": "Center Key (https://centerkey.com)",
+   "keywords": [
+      "build",
+      "cli",
+      "scripts"
+   ],
+   "jshintConfig": {
+      "esversion": 11,
+      "strict": "implied",
+      "eqeqeq": true,
+      "undef": true,
+      "unused": true,
+      "varstmt": true,
+      "node": true,
+      "mocha": true
+   },
+   "eslintConfig": {
+      "ignorePatterns": [
+         "build",
+         "dist",
+         "node_modules"
+      ],
+      "root": true,
+      "parser": "@typescript-eslint/parser",
+      "plugins": [
+         "@typescript-eslint"
+      ],
+      "extends": [
+         "eslint:recommended",
+         "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+         "@typescript-eslint/no-non-null-assertion": "off"
+      }
+   },
+   "runScriptsConfig": {
+      "spec-a": [
+         "copy-folder bin spec/fixtures/target/a",
+         "copy-folder .github/workflows spec/fixtures/target/a"
+      ],
+      "spec-b1": "copy-file LICENSE.txt spec/fixtures/target/b/license1.txt",
+      "spec-b2": [
+         "copy-file --cd=spec/fixtures/target/b license1.txt license2.txt",
+         "copy-file --cd=spec/fixtures/target/b license2.txt last.txt",
+         "rimraf spec/fixtures/target/b/license*.txt"
+      ]
+   },
+   "scripts": {
+      "step:01": "rimraf build dist spec/fixtures/target **/.DS_Store",
+      "step:02": "jshint . --exclude-path .gitignore",
+      "step:03": "eslint --max-warnings 0 . --ext .ts",
+      "step:10": "tsc",
+      "step:11": "tsc --module UMD --outDir build/umd",
+      "step:12": "copy-file build/umd/run-scripts.js build/run-scripts.umd.cjs",
+      "step:20": "add-dist-header build dist",
+      "pretest": "npm-run-all step:*",
+      "test": "mocha spec/*.spec.js"
+   },
+   "dependencies": {
+   },
+   "devDependencies": {
+      "@types/node": "~18.11",
+      "@typescript-eslint/eslint-plugin": "~5.40",
+      "@typescript-eslint/parser": "~5.40",
+      "add-dist-header": "~0.3",
+      "assert-deep-strict-equal": "~1.0",
+      "copy-file-util": "~0.1",
+      "eslint": "~8.25",
+      "jshint": "~2.13",
+      "mocha": "~10.1",
+      "npm-run-all2": "~6.0",
+      "rimraf": "~3.0",
+      "typescript": "~4.8"
+   }
+}
