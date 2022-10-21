@@ -29,7 +29,7 @@
 import { runScripts } from '../dist/run-scripts.js';
 
 // Parameters
-const validFlags =  ['quiet'];
+const validFlags =  ['compact', 'quiet'];
 const args =        process.argv.slice(2);
 const flags =       args.filter(arg => /^--/.test(arg));
 const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));
@@ -48,6 +48,7 @@ const error =
 if (error)
    throw Error('[run-scripts-util] ' + error);
 const options = {
-   quiet: flagOn.quiet,
+   compact: flagOn.compact,
+   quiet:   flagOn.quiet,
    };
 groups.forEach(group => runScripts.exec(group, options));

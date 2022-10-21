@@ -4,14 +4,16 @@ import { spawnSync } from 'node:child_process';
 import fs from 'fs';
 
 export type Settings = {
-   quiet: boolean,  //suppress informational messages
+   compact: boolean,  //do not display the command group name
+   quiet:   boolean,  //suppress informational messages
    };
 export type Options = Partial<Settings>;
 
 const runScripts = {
    exec(group: string, options?: Options) {
       const defaults = {
-         quiet: false,
+         compact: false,
+         quiet:   false,
          };
       const settings = { ...defaults, ...options };
       const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
@@ -20,7 +22,9 @@ const runScripts = {
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
       [commands].flat().forEach((command: string, index: number) => {
          const startTime = Date.now();
-         if (!settings.quiet)
+         if (settings.compact)
+            console.log(command);
+         else if (!settings.quiet)
             console.log(group, index + 1, '->', command);
          const task = spawnSync(command, { shell: true, stdio: 'inherit' });
          if (task.status !== 0)
