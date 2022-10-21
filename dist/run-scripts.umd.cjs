@@ -1,4 +1,4 @@
-//! run-scripts-util v0.0.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v0.1.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -20,6 +20,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     const runScripts = {
         exec(group, options) {
             const defaults = {
+                compact: false,
                 quiet: false,
             };
             const settings = { ...defaults, ...options };
@@ -29,7 +30,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 throw Error('[run-scripts-util] Cannot find commands: ' + group);
             [commands].flat().forEach((command, index) => {
                 const startTime = Date.now();
-                if (!settings.quiet)
+                if (settings.compact)
+                    console.log(command);
+                else if (!settings.quiet)
                     console.log(group, index + 1, '->', command);
                 const task = (0, node_child_process_1.spawnSync)(command, { shell: true, stdio: 'inherit' });
                 if (task.status !== 0)
