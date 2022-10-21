@@ -46,7 +46,7 @@ describe('Library module', () => {
 describe('Calling runScripts.exec()', () => {
 
    it('correctly executes a group of commands', () => {
-      const options = { compact: false, quiet: false };
+      const options = { quiet: false, verbose: true };
       runScripts.exec('spec-a', options);
       const actual = fs.readdirSync('spec/fixtures/target/a').sort();
       const expected = [

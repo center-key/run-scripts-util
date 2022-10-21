@@ -70,10 +70,10 @@ $ run-scripts clean compile
 
 ### 3. CLI Flags
 Command-line flags:
-| Flag        | Description                            |
-| ----------- | -------------------------------------- |
-| `--compact` | Do not display the command group name. |
-| `--quiet`   | Suppress informational messages.       |
+| Flag        | Description                                       |
+| ----------- | ------------------------------------------------- |
+| `--quiet`   | Suppress informational messages.                  |
+| `--verbose` | Add command group name to informational messages. |
 
 ### 4. Example CLI Usage
 Examples:
