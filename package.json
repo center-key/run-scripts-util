@@ -1,6 +1,6 @@
 {
    "name": "run-scripts-util",
-   "version": "0.0.0",
+   "version": "0.0.1",
    "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
    "license": "MIT",
    "type": "module",
@@ -63,13 +63,15 @@
    "runScriptsConfig": {
       "spec-a": [
          "copy-folder bin spec/fixtures/target/a",
+         "copy-file spec/fixtures/target/a/cli.js spec/fixtures/target/a/cli2.js",
          "copy-folder .github/workflows spec/fixtures/target/a"
       ],
-      "spec-b1": "copy-file LICENSE.txt spec/fixtures/target/b/license1.txt",
+      "spec-b1": "copy-file LICENSE.txt spec/fixtures/target/b1/license1.txt",
       "spec-b2": [
-         "copy-file --cd=spec/fixtures/target/b license1.txt license2.txt",
-         "copy-file --cd=spec/fixtures/target/b license2.txt last.txt",
-         "rimraf spec/fixtures/target/b/license*.txt"
+         "copy-folder --cd=spec/fixtures/target b1 b2",
+         "copy-file --cd=spec/fixtures/target/b2 license1.txt license2.txt",
+         "copy-file --cd=spec/fixtures/target/b2 license2.txt last.txt",
+         "rimraf spec/fixtures/target/b1 spec/fixtures/target/b2/license*.txt"
       ]
    },
    "scripts": {
@@ -83,8 +85,6 @@
       "pretest": "npm-run-all step:*",
       "test": "mocha spec/*.spec.js"
    },
-   "dependencies": {
-   },
    "devDependencies": {
       "@types/node": "~18.11",
       "@typescript-eslint/eslint-plugin": "~5.40",
@@ -92,6 +92,7 @@
       "add-dist-header": "~0.3",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~0.1",
+      "copy-folder-util": "~0.2",
       "eslint": "~8.25",
       "jshint": "~2.13",
       "mocha": "~10.1",

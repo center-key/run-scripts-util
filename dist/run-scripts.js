@@ -1,4 +1,4 @@
-//! run-scripts-util v0.0.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v0.0.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawnSync } from 'node:child_process';
 import fs from 'fs';

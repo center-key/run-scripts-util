@@ -51,6 +51,7 @@ describe('Calling runScripts.exec()', () => {
       const actual = fs.readdirSync('spec/fixtures/target/a').sort();
       const expected = [
          'cli.js',
+         'cli2.js',
          'release-on-vtag.yaml',
          'run-spec-on-push.yaml',
          ];
@@ -76,7 +77,7 @@ describe('Executing the CLI', () => {
    it('with two command groups correctly runs them in serial', () => {
       const cmd = 'node bin/cli.js spec-b1 spec-b2';
       execSync(cmd);
-      const actual =   fs.readdirSync('spec/fixtures/target/b').sort();
+      const actual =   fs.readdirSync('spec/fixtures/target/b2').sort();
       const expected = ['last.txt'];
       assertDeepStrictEqual(actual, expected);
       });
