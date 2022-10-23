@@ -29,7 +29,7 @@
 import { runScripts } from '../dist/run-scripts.js';
 
 // Parameters
-const validFlags =  ['quiet', 'verbose'];
+const validFlags =  ['note', 'quiet', 'verbose'];
 const args =        process.argv.slice(2);
 const flags =       args.filter(arg => /^--/.test(arg));
 const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));

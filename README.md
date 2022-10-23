@@ -50,7 +50,7 @@ $ npm install --save-dev run-scripts-util
 ## B) Usage
 ### 1. npm scripts
 Use `run-scripts` in the `"scripts"` section of your **package.json** file and add a
-parameter naming the key in `runScriptConfig` holding the array of commands to execute.
+parameter naming the key in `runScriptsConfig` holding the array of commands to execute.
 
 Example **package.json** scripts:
 ```json
@@ -70,10 +70,11 @@ $ run-scripts clean compile
 
 ### 3. CLI Flags
 Command-line flags:
-| Flag        | Description                                       |
-| ----------- | ------------------------------------------------- |
-| `--quiet`   | Suppress informational messages.                  |
-| `--verbose` | Add command group name to informational messages. |
+| Flag        | Description                                       | Value      |
+| ----------- | ------------------------------------------------- | ---------- |
+| `--note`    | Place to add a comment only for humans.           | **string** |
+| `--quiet`   | Suppress informational messages.                  | N/A        |
+| `--verbose` | Add command group name to informational messages. | N/A        |
 
 ### 4. Example CLI Usage
 Examples:
