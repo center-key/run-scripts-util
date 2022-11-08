@@ -5,7 +5,7 @@ import fs from 'fs';
 
 export type Settings = {
    quiet:   boolean,  //suppress informational messages
-   verbose: boolean,  //add command group name to informational messages
+   verbose: boolean,  //add script group name to informational messages
    };
 export type Options = Partial<Settings>;
 

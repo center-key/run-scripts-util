@@ -70,11 +70,11 @@ $ run-scripts clean compile
 
 ### 3. CLI Flags
 Command-line flags:
-| Flag        | Description                                       | Value      |
-| ----------- | ------------------------------------------------- | ---------- |
-| `--note`    | Place to add a comment only for humans.           | **string** |
-| `--quiet`   | Suppress informational messages.                  | N/A        |
-| `--verbose` | Add command group name to informational messages. | N/A        |
+| Flag        | Description                                      | Value      |
+| ----------- | ------------------------------------------------ | ---------- |
+| `--note`    | Place to add a comment only for humans.          | **string** |
+| `--quiet`   | Suppress informational messages.                 | N/A        |
+| `--verbose` | Add script group name to informational messages. | N/A        |
 
 ### 4. Example CLI Usage
 Examples:

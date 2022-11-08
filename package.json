@@ -1,6 +1,6 @@
 {
    "name": "run-scripts-util",
-   "version": "0.1.0",
+   "version": "0.1.1",
    "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
    "license": "MIT",
    "type": "module",
@@ -29,7 +29,11 @@
    "keywords": [
       "build",
       "cli",
-      "scripts"
+      "npm",
+      "npm-scripts",
+      "scripts",
+      "sequential",
+      "task"
    ],
    "jshintConfig": {
       "esversion": 11,
@@ -87,13 +91,13 @@
    },
    "devDependencies": {
       "@types/node": "~18.11",
-      "@typescript-eslint/eslint-plugin": "~5.40",
-      "@typescript-eslint/parser": "~5.40",
+      "@typescript-eslint/eslint-plugin": "~5.42",
+      "@typescript-eslint/parser": "~5.42",
       "add-dist-header": "~0.3",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~0.1",
       "copy-folder-util": "~0.2",
-      "eslint": "~8.26",
+      "eslint": "~8.27",
       "jshint": "~2.13",
       "mocha": "~10.1",
       "npm-run-all2": "~6.0",

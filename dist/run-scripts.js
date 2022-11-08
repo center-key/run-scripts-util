@@ -1,12 +1,12 @@
-//! run-scripts-util v0.1.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v0.1.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawnSync } from 'node:child_process';
 import fs from 'fs';
 const runScripts = {
     exec(group, options) {
         const defaults = {
-            compact: false,
             quiet: false,
+            verbose: false,
         };
         const settings = { ...defaults, ...options };
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
@@ -15,10 +15,10 @@ const runScripts = {
             throw Error('[run-scripts-util] Cannot find commands: ' + group);
         [commands].flat().forEach((command, index) => {
             const startTime = Date.now();
-            if (settings.compact)
-                console.log(command);
-            else if (!settings.quiet)
+            if (settings.verbose)
                 console.log(group, index + 1, '->', command);
+            else if (!settings.quiet)
+                console.log(command);
             const task = spawnSync(command, { shell: true, stdio: 'inherit' });
             if (task.status !== 0)
                 throw Error(`[run-scripts-util] ${group} #${index + 1}, error status: ${task.status}`);
