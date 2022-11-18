@@ -4,8 +4,9 @@ import { spawnSync } from 'node:child_process';
 import fs from 'fs';
 
 export type Settings = {
-   quiet:   boolean,  //suppress informational messages
-   verbose: boolean,  //add script group name to informational messages
+   only:    number | null,  //execute just one command in the group (starts with 1)
+   quiet:   boolean,        //suppress informational messages
+   verbose: boolean,        //add script group name to informational messages
    };
 export type Options = Partial<Settings>;
 
@@ -30,6 +31,7 @@ const runScripts = {
       //          "test": "mocha spec"
       //       },
       const defaults = {
+         only:    null,
          quiet:   false,
          verbose: false,
          };
@@ -38,18 +40,21 @@ const runScripts = {
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
-      commands.flat().forEach((command: string, index: number) => {
+      const execCommand = (command: string, step: number) => {
          const startTime = Date.now();
          if (settings.verbose)
-            console.log(group, index + 1, '→', command);
+            console.log(group, step, '→', command);
          else if (!settings.quiet)
             console.log(command);
          const task = spawnSync(command, { shell: true, stdio: 'inherit' });
          if (task.status !== 0)
-            throw Error(`[run-scripts-util] ${group} #${index + 1}, error status: ${task.status}`);
+            throw Error(`[run-scripts-util] ${group} #${step}, error status: ${task.status}`);
          if (!settings.quiet)
             console.log(`done (${Date.now() - startTime}ms)\n`);
-         });
+         };
+      const active = (step: number) => settings.only === null || step === settings.only;
+      commands.forEach((command: string, index: number) =>
+         active(index + 1) ? execCommand(command, index + 1) : true);
       },
    };
 

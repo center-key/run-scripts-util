@@ -22,7 +22,7 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
    "test": "mocha spec"
 },
 ```
-**into easy-to-read named groups:**
+**into easy-to-read named groups of commands:**
 ```json
 "runScriptsConfig": {
    "clean": [
@@ -70,11 +70,12 @@ $ run-scripts clean compile
 
 ### 3. CLI Flags
 Command-line flags:
-| Flag        | Description                                      | Value      |
-| ----------- | ------------------------------------------------ | ---------- |
-| `--note`    | Place to add a comment only for humans.          | **string** |
-| `--quiet`   | Suppress informational messages.                 | N/A        |
-| `--verbose` | Add script group name to informational messages. | N/A        |
+| Flag        | Description                                            | Value      |
+| ----------- | ------------------------------------------------------ | ---------- |
+| `--note`    | Place to add a comment only for humans.                | **string** |
+| `--only`    | Execute just one command in the group (starts with 1). | **number** |
+| `--quiet`   | Suppress informational messages.                       | N/A        |
+| `--verbose` | Add script group name to informational messages.       | N/A        |
 
 ### 4. Example CLI Usage
 Examples:
@@ -82,6 +83,8 @@ Examples:
    Execute the `clean` group of commands and then execute the `compile` group fo commands.
    - `run-scripts clean compile --quiet`<br>
    Do not display information messages.
+   - `run-scripts compile --only=2`<br>
+   Execute just the second command in the `compile` group.
 
 ## C) Application Code
 Even though **run-scripts-util** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.

@@ -30,7 +30,7 @@ import { cliArgvUtil } from 'cli-argv-util';
 import { runScripts } from '../dist/run-scripts.js';
 
 // Parameters and flags
-const validFlags = ['note', 'quiet', 'verbose'];
+const validFlags = ['note', 'only', 'quiet', 'verbose'];
 const cli =        cliArgvUtil.parse(validFlags);
 const groups =     cli.params;  //list of script set names
 
@@ -42,6 +42,7 @@ const error =
 if (error)
    throw Error('[run-scripts-util] ' + error);
 const options = {
+   only:    cli.flagOn.only ? Number(cli.flagMap.only) : null,
    quiet:   cli.flagOn.quiet,
    verbose: cli.flagOn.verbose,
    };
