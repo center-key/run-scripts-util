@@ -58,6 +58,12 @@ Example **package.json** scripts:
       "build": "run-scripts clean compile",
    },
 ```
+To manually run a sinlge command, use `npx` from the terminal plus the `--only` flag.
+
+For example, to run the third command in the `compile` group by itself:
+```shell
+$ npx run-scripts compile --only=3
+```
 
 ### 2. Global
 You can install **run-scripts-util** globally and then run it anywhere directly from the terminal.
