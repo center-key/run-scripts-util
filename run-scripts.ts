@@ -11,16 +11,34 @@ export type Options = Partial<Settings>;
 
 const runScripts = {
    exec(group: string, options?: Options) {
+      // Example (runs spawnSync() for each of the 4 "compile" commands):
+      //    runScripts.exec('compile', { verbose: true });
+      //    [package.json]
+      //       "runScriptsConfig": {
+      //          "clean": [
+      //             "rimraf build dist"
+      //          ],
+      //          "compile": [
+      //             "tsc",
+      //             "lessc src/web-app/style.less build/web-app/style.css",
+      //             "copy-folder src/graphics build/my-app/graphics",
+      //             "replacer src/web-app --ext=.html --pkg build/my-app"
+      //          ]
+      //       },
+      //       "scripts": {
+      //          "pretest": "run-scripts clean compile",
+      //          "test": "mocha spec"
+      //       },
       const defaults = {
          quiet:   false,
          verbose: false,
          };
       const settings = { ...defaults, ...options };
-      const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-      const commands = pkg.runScriptsConfig?.[group] ?? pkg.scripts?.[group];
-      if (!commands)
+      const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
+      if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
-      [commands].flat().forEach((command: string, index: number) => {
+      commands.flat().forEach((command: string, index: number) => {
          const startTime = Date.now();
          if (settings.verbose)
             console.log(group, index + 1, '→', command);

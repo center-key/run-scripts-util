@@ -70,7 +70,9 @@
          "copy-file spec/fixtures/target/a/cli.js spec/fixtures/target/a/cli2.js",
          "copy-folder .github/workflows spec/fixtures/target/a"
       ],
-      "spec-b1": "copy-file LICENSE.txt spec/fixtures/target/b1/license1.txt",
+      "spec-b1": [
+         "copy-file LICENSE.txt spec/fixtures/target/b1/license1.txt"
+      ],
       "spec-b2": [
          "copy-folder --cd=spec/fixtures/target b1 b2",
          "copy-file --cd=spec/fixtures/target/b2 license1.txt license2.txt",
