@@ -1,6 +1,6 @@
 {
    "name": "run-scripts-util",
-   "version": "0.1.1",
+   "version": "0.1.2",
    "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
    "license": "MIT",
    "type": "module",

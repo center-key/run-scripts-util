@@ -1,4 +1,4 @@
-//! run-scripts-util v0.1.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v0.1.2 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -31,7 +31,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             [commands].flat().forEach((command, index) => {
                 const startTime = Date.now();
                 if (settings.verbose)
-                    console.log(group, index + 1, '->', command);
+                    console.log(group, index + 1, '→', command);
                 else if (!settings.quiet)
                     console.log(command);
                 const task = (0, node_child_process_1.spawnSync)(command, { shell: true, stdio: 'inherit' });
