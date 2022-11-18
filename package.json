@@ -89,10 +89,13 @@
       "pretest": "npm-run-all step:*",
       "test": "mocha spec/*.spec.js"
    },
+   "dependencies": {
+      "cli-argv-util": "~0.1"
+   },
    "devDependencies": {
       "@types/node": "~18.11",
-      "@typescript-eslint/eslint-plugin": "~5.42",
-      "@typescript-eslint/parser": "~5.42",
+      "@typescript-eslint/eslint-plugin": "~5.43",
+      "@typescript-eslint/parser": "~5.43",
       "add-dist-header": "~0.3",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~0.1",
@@ -102,6 +105,6 @@
       "mocha": "~10.1",
       "npm-run-all2": "~6.0",
       "rimraf": "~3.0",
-      "typescript": "~4.8"
+      "typescript": "~4.9"
    }
 }

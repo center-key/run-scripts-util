@@ -26,29 +26,23 @@
 //    $ run-scripts compile --quiet
 
 // Imports
+import { cliArgvUtil } from 'cli-argv-util';
 import { runScripts } from '../dist/run-scripts.js';
 
-// Parameters
-const validFlags =  ['note', 'quiet', 'verbose'];
-const args =        process.argv.slice(2);
-const flags =       args.filter(arg => /^--/.test(arg));
-const flagMap =     Object.fromEntries(flags.map(flag => flag.replace(/^--/, '').split('=')));
-const flagOn =      Object.fromEntries(validFlags.map(flag => [flag, flag in flagMap]));
-const invalidFlag = Object.keys(flagMap).find(key => !validFlags.includes(key));
-const params =      args.filter(arg => !/^--/.test(arg));
-
-// Data
-const groups = params;  //list of script set names
+// Parameters and flags
+const validFlags = ['note', 'quiet', 'verbose'];
+const cli =        cliArgvUtil.parse(validFlags);
+const groups =     cli.params;  //list of script set names
 
 // Run scripts
 const error =
-   invalidFlag ?    'Invalid flag: ' + invalidFlag :
-   !params.length ? 'Must provide at lease one script group to run.' :
+   cli.invalidFlag ? cli.invalidFlagMsg :
+   !cli.paramCount ? 'Must provide at lease one script group to run.' :
    null;
 if (error)
    throw Error('[run-scripts-util] ' + error);
 const options = {
-   quiet:   flagOn.quiet,
-   verbose: flagOn.compact,
+   quiet:   cli.flagOn.quiet,
+   verbose: cli.flagOn.verbose,
    };
 groups.forEach(group => runScripts.exec(group, options));
