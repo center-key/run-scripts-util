@@ -67,16 +67,7 @@ For example, to run the third command in the `compile` group by itself:
 $ npx run-scripts compile --only=3
 ```
 
-### 3. Global
-You can install **run-scripts-util** globally and then run it anywhere directly from the terminal.
-
-Example terminal commands:
-```shell
-$ npm install --global run-scripts-util
-$ run-scripts clean compile
-```
-
-### 4. CLI Flags
+### 3. CLI Flags
 Command-line flags:
 | Flag        | Description                                            | Value      |
 | ----------- | ------------------------------------------------------ | ---------- |
@@ -85,7 +76,7 @@ Command-line flags:
 | `--quiet`   | Suppress informational messages.                       | N/A        |
 | `--verbose` | Add script group name to informational messages.       | N/A        |
 
-### 5. Example CLI Usage
+### 4. Example CLI Usage
 Examples:
    - `run-scripts clean compile`<br>
    Execute the `clean` group of commands and then execute the `compile` group fo commands.
