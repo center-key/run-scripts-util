@@ -59,7 +59,7 @@ Example **package.json** scripts:
    },
 ```
 
-### 2. Debug a Command
+### 2. Debug a command
 To manually run a sinlge command, use `npx` from the terminal plus the `--only` flag.
 
 For example, to run the third command in the `compile` group by itself:
@@ -67,7 +67,7 @@ For example, to run the third command in the `compile` group by itself:
 $ npx run-scripts compile --only=3
 ```
 
-### 3. CLI Flags
+### 3. CLI flags
 Command-line flags:
 | Flag        | Description                                            | Value      |
 | ----------- | ------------------------------------------------------ | ---------- |
@@ -76,7 +76,7 @@ Command-line flags:
 | `--quiet`   | Suppress informational messages.                       | N/A        |
 | `--verbose` | Add script group name to informational messages.       | N/A        |
 
-### 4. Example CLI Usage
+### 4. Example CLI usage
 Examples:
    - `run-scripts clean compile`<br>
    Execute the `clean` group of commands and then execute the `compile` group fo commands.
