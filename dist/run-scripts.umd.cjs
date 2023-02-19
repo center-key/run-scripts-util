@@ -1,4 +1,4 @@
-//! run-scripts-util v0.1.3 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.0.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };

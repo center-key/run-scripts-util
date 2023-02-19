@@ -80,9 +80,11 @@ Command-line flags:
 Examples:
    - `run-scripts clean compile`<br>
    Execute the `clean` group of commands and then execute the `compile` group fo commands.
+
    - `run-scripts clean compile --quiet`<br>
    Do not display information messages.
-   - `run-scripts compile --only=2`<br>
+
+   - `run-scripts compile --verbose --only=2`<br>
    Execute just the second command in the `compile` group.
 
 ## C) Application Code
