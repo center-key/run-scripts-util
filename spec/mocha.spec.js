@@ -4,6 +4,7 @@
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
 import { execSync } from 'node:child_process';
+import { revWebAssets } from 'rev-web-assets';
 import assert from 'assert';
 import fs from     'fs';
 
@@ -77,8 +78,8 @@ describe('Executing the CLI', () => {
    it('with two command groups correctly runs them in serial', () => {
       const cmd = 'node bin/cli.js spec-b1 spec-b2';
       execSync(cmd);
-      const actual =   fs.readdirSync('spec/fixtures/target/b2').sort();
-      const expected = ['last.txt'];
+      const actual =   revWebAssets.readFolderRecursive('spec/fixtures/target/b');
+      const expected = ['spec/fixtures/target/b/2/last.txt'];
       assertDeepStrictEqual(actual, expected);
       });
 

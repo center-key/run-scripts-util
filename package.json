@@ -71,13 +71,13 @@
          "copy-folder .github/workflows spec/fixtures/target/a"
       ],
       "spec-b1": [
-         "copy-file LICENSE.txt spec/fixtures/target/b1/license1.txt"
+         "copy-file LICENSE.txt spec/fixtures/target/b/1/license1.txt"
       ],
       "spec-b2": [
-         "copy-folder --cd=spec/fixtures/target b1 b2",
-         "copy-file --cd=spec/fixtures/target/b2 license1.txt license2.txt",
-         "copy-file --cd=spec/fixtures/target/b2 license2.txt last.txt",
-         "rimraf spec/fixtures/target/b1 spec/fixtures/target/b2/license*.txt"
+         "copy-folder --cd=spec/fixtures/target/b 1 2",
+         "copy-file --cd=spec/fixtures/target/b/2 license1.txt license2.txt",
+         "copy-file --cd=spec/fixtures/target/b/2 license2.txt last.txt",
+         "rimraf spec/fixtures/target/b/1 spec/fixtures/target/b/2/license*.txt"
       ]
    },
    "scripts": {
@@ -96,8 +96,8 @@
    },
    "devDependencies": {
       "@types/node": "~18.15",
-      "@typescript-eslint/eslint-plugin": "~5.55",
-      "@typescript-eslint/parser": "~5.55",
+      "@typescript-eslint/eslint-plugin": "~5.56",
+      "@typescript-eslint/parser": "~5.56",
       "add-dist-header": "~1.0",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~1.0",
@@ -106,6 +106,7 @@
       "jshint": "~2.13",
       "mocha": "~10.2",
       "npm-run-all2": "~6.0",
+      "rev-web-assets": "~1.0",
       "rimraf": "~4.4",
       "typescript": "~5.0"
    }
