@@ -54,7 +54,7 @@ const runScripts = {
          };
       const active = (step: number) => settings.only === null || step === settings.only;
       commands.forEach((command: string, index: number) =>
-         active(index + 1) ? execCommand(command, index + 1) : true);
+         active(index + 1) && execCommand(command, index + 1));
       },
    };
 

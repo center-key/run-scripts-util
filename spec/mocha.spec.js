@@ -6,7 +6,6 @@ import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
 import { execSync } from 'node:child_process';
 import { revWebAssets } from 'rev-web-assets';
 import assert from 'assert';
-import fs from     'fs';
 
 // Setup
 import { runScripts } from '../dist/run-scripts.js';
@@ -15,11 +14,11 @@ import { runScripts } from '../dist/run-scripts.js';
 describe('The "dist" folder', () => {
 
    it('contains the correct files', () => {
-      const actual = fs.readdirSync('dist').sort();
+      const actual = revWebAssets.readFolderRecursive('dist');
       const expected = [
-         'run-scripts.d.ts',
-         'run-scripts.js',
-         'run-scripts.umd.cjs',
+         'dist/run-scripts.d.ts',
+         'dist/run-scripts.js',
+         'dist/run-scripts.umd.cjs',
          ];
       assertDeepStrictEqual(actual, expected);
       });
@@ -47,14 +46,14 @@ describe('Library module', () => {
 describe('Calling runScripts.exec()', () => {
 
    it('correctly executes a group of commands', () => {
-      const options = { quiet: false, verbose: true };
+      const options = { quiet: false, verbose: false };
       runScripts.exec('spec-a', options);
-      const actual = fs.readdirSync('spec/fixtures/target/a').sort();
+      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/a');
       const expected = [
-         'cli.js',
-         'cli2.js',
-         'release-on-vtag.yaml',
-         'run-spec-on-push.yaml',
+         'spec/fixtures/target/a/cli.js',
+         'spec/fixtures/target/a/cli2.js',
+         'spec/fixtures/target/a/release-on-vtag.yaml',
+         'spec/fixtures/target/a/run-spec-on-push.yaml',
          ];
       assertDeepStrictEqual(actual, expected);
       });
@@ -75,11 +74,28 @@ describe('Correct error is thrown', () => {
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
 
+   it('runs the commands in the correct order', () => {
+      const cmd = 'node bin/cli.js spec-b1 spec-b2 --verbose';
+      execSync(cmd, { stdio: 'inherit' });
+      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/b');
+      const expected = [
+         'spec/fixtures/target/b/1/x.json',
+         'spec/fixtures/target/b/1/y.json',
+         'spec/fixtures/target/b/1/z.json',
+         'spec/fixtures/target/b/2/x.json',
+         'spec/fixtures/target/b/2/y.json',
+         'spec/fixtures/target/b/2/z.json',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
    it('with two command groups correctly runs them in serial', () => {
-      const cmd = 'node bin/cli.js spec-b1 spec-b2';
-      execSync(cmd);
-      const actual =   revWebAssets.readFolderRecursive('spec/fixtures/target/b');
-      const expected = ['spec/fixtures/target/b/2/last.txt'];
+      const cmd = 'node bin/cli.js spec-c1 spec-c2 --note=hello --quiet';
+      execSync(cmd, { stdio: 'inherit' });
+      const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/c');
+      const expected = [
+         'spec/fixtures/target/c/2/last.txt',
+         ];
       assertDeepStrictEqual(actual, expected);
       });
 

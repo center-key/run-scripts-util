@@ -35,9 +35,11 @@ const cli =        cliArgvUtil.parse(validFlags);
 const groups =     cli.params;  //list of script set names
 
 // Run scripts
+const invalidOnlyUse = cli.flagOn.only && cli.paramCount !== 1;
 const error =
    cli.invalidFlag ? cli.invalidFlagMsg :
-   !cli.paramCount ? 'Must provide at lease one script group to run.' :
+   !cli.paramCount ? 'Must provide at lease one group of commands to run.' :
+   invalidOnlyUse ?  'The --only flag does not support multiple groups of commands.' :
    null;
 if (error)
    throw Error('[run-scripts-util] ' + error);

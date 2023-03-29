@@ -71,13 +71,21 @@
          "copy-folder .github/workflows spec/fixtures/target/a"
       ],
       "spec-b1": [
-         "copy-file LICENSE.txt spec/fixtures/target/b/1/license1.txt"
+         "copy-file tsconfig.json spec/fixtures/target/b/1/x.json"
       ],
       "spec-b2": [
-         "copy-folder --cd=spec/fixtures/target/b 1 2",
-         "copy-file --cd=spec/fixtures/target/b/2 license1.txt license2.txt",
-         "copy-file --cd=spec/fixtures/target/b/2 license2.txt last.txt",
-         "rimraf spec/fixtures/target/b/1 spec/fixtures/target/b/2/license*.txt"
+         "copy-file tsconfig.json spec/fixtures/target/b/1/y.json",
+         "copy-file tsconfig.json spec/fixtures/target/b/1/z.json",
+         "copy-folder spec/fixtures/target/b/1 spec/fixtures/target/b/2"
+      ],
+      "spec-c1": [
+         "copy-file LICENSE.txt spec/fixtures/target/c/1/license1.txt"
+      ],
+      "spec-c2": [
+         "copy-folder --cd=spec/fixtures/target/c 1 2",
+         "copy-file --cd=spec/fixtures/target/c/2 license1.txt license2.txt",
+         "copy-file --cd=spec/fixtures/target/c/2 license2.txt last.txt",
+         "rimraf spec/fixtures/target/c/1 spec/fixtures/target/c/2/license*.txt"
       ]
    },
    "scripts": {
@@ -89,20 +97,23 @@
       "step:12": "copy-file build/umd/run-scripts.js build/run-scripts.umd.cjs",
       "step:20": "add-dist-header build dist",
       "pretest": "npm-run-all step:*",
-      "test": "mocha spec/*.spec.js"
+      "test": "mocha spec/*.spec.js",
+      "devx": "tsc && add-dist-header build dist && mocha spec/*.spec.js -grep parallel",
+      "dev": "tsc && add-dist-header build dist && mocha spec/*.spec.js -grep serial"
    },
    "dependencies": {
       "cli-argv-util": "~1.0"
    },
    "devDependencies": {
       "@types/node": "~18.15",
-      "@typescript-eslint/eslint-plugin": "~5.56",
-      "@typescript-eslint/parser": "~5.56",
+      "@typescript-eslint/eslint-plugin": "~5.57",
+      "@typescript-eslint/parser": "~5.57",
       "add-dist-header": "~1.0",
       "assert-deep-strict-equal": "~1.0",
+      "concurrently": "~8.0.0",
       "copy-file-util": "~1.0",
       "copy-folder-util": "~1.0",
-      "eslint": "~8.36",
+      "eslint": "~8.37",
       "jshint": "~2.13",
       "mocha": "~10.2",
       "npm-run-all2": "~6.0",
