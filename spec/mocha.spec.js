@@ -74,17 +74,17 @@ describe('Correct error is thrown', () => {
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
 
-   it('runs the commands in the correct order', () => {
-      const cmd = 'node bin/cli.js spec-b1 spec-b2 --verbose';
+   it('correctly runs parallel commands', () => {
+      const cmd = 'node bin/cli.js spec-b1 spec-b2 --verbose --parallel';
       execSync(cmd, { stdio: 'inherit' });
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/b');
       const expected = [
+         'spec/fixtures/target/b/1/w.json',
          'spec/fixtures/target/b/1/x.json',
          'spec/fixtures/target/b/1/y.json',
          'spec/fixtures/target/b/1/z.json',
+         'spec/fixtures/target/b/2/w.json',
          'spec/fixtures/target/b/2/x.json',
-         'spec/fixtures/target/b/2/y.json',
-         'spec/fixtures/target/b/2/z.json',
          ];
       assertDeepStrictEqual(actual, expected);
       });

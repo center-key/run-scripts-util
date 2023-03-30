@@ -8,7 +8,8 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
 [![Vulnerabilities](https://snyk.io/test/github/center-key/run-scripts-util/badge.svg)](https://snyk.io/test/github/center-key/run-scripts-util)
 [![Build](https://github.com/center-key/run-scripts-util/workflows/build/badge.svg)](https://github.com/center-key/run-scripts-util/actions/workflows/run-spec-on-push.yaml)
 
-**run-scripts-util** reads the `runScriptsConfig` settings in your **package.son** to get a list (array) of commands to execute.
+**run-scripts-util** reads the `runScriptsConfig` settings in your **package.son** to get
+groups (arrays) of commands to execute.
 
 **Turn the traditional hard-to-follow commands:**
 ```json
@@ -22,7 +23,7 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
    "test": "mocha spec"
 },
 ```
-**into easy-to-read named groups of commands:**
+**into easy-to-read named groups (arrays) of commands:**
 ```json
 "runScriptsConfig": {
    "clean": [
@@ -40,6 +41,8 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
    "test": "mocha spec"
 },
 ```
+Each group of commands is executed in order, and the commands within each group are by default
+executed in serial (synchronously) but can optionally be executed in parallel (asynchronously).
 
 ## A) Setup
 Install package for node:
@@ -50,7 +53,8 @@ $ npm install --save-dev run-scripts-util
 ## B) Usage
 ### 1. npm scripts
 Use `run-scripts` in the `"scripts"` section of your **package.json** file and add a
-parameter naming the key in `runScriptsConfig` holding the array of commands to execute.
+parameter naming the key in `runScriptsConfig` holding the group (array) of commands to
+execute.
 
 Example **package.json** scripts:
 ```json
@@ -60,7 +64,7 @@ Example **package.json** scripts:
 ```
 
 ### 2. Debug a command
-To manually run a sinlge command, use `npx` from the terminal plus the `--only` flag.
+To manually run a single command, use `npx` from the terminal plus the `--only` flag.
 
 For example, to run the third command in the `compile` group by itself:
 ```shell
@@ -69,12 +73,13 @@ $ npx run-scripts compile --only=3
 
 ### 3. CLI flags
 Command-line flags:
-| Flag        | Description                                            | Value      |
-| ----------- | ------------------------------------------------------ | ---------- |
-| `--note`    | Place to add a comment only for humans.                | **string** |
-| `--only`    | Execute just one command in the group (starts with 1). | **number** |
-| `--quiet`   | Suppress informational messages.                       | N/A        |
-| `--verbose` | Add script group name to informational messages.       | N/A        |
+| Flag         | Description                                            | Value      |
+| ------------ | ------------------------------------------------------ | ---------- |
+| `--note`     | Place to add a comment only for humans.                | **string** |
+| `--only`     | Execute just one command in the group (starts with 1). | **number** |
+| `--parallel` | Execute all commands within each group asynchronously. | N/A        |
+| `--quiet`    | Suppress informational messages.                       | N/A        |
+| `--verbose`  | Add script group name to informational messages.       | N/A        |
 
 ### 4. Example CLI usage
 Examples:
@@ -87,6 +92,10 @@ Examples:
    - `run-scripts compile --verbose --only=2`<br>
    Execute just the second command in the `compile` group.
 
+   - `run-scripts lint watch --parallel`<br>
+   Execute all the `lint` commands in parallel and after all the commands are finished execute
+   the `watch` commands in parallel.
+
 ## C) Application Code
 Even though **run-scripts-util** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.
 
@@ -95,6 +104,7 @@ Example:
 import { runScripts } from 'run-scripts-util';
 const options = { quiet: false };
 runScripts.exec('compile', options);
+runScripts.execParallel('watch', options);
 ```
 
 See the **TypeScript Declarations** at the top of [run-scripts.ts](run-scripts.ts) for documentation.

@@ -1,6 +1,6 @@
 // run-scripts-util ~~ MIT License
 
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import fs from 'fs';
 
 export type Settings = {
@@ -9,10 +9,19 @@ export type Settings = {
    verbose: boolean,        //add script group name to informational messages
    };
 export type Options = Partial<Settings>;
+export type ProcessInfo = {
+   group: string,
+   step:  number,
+   start: number,
+   pid:   number | null,
+   code:  number,
+   ms:    number,
+   };
 
 const runScripts = {
+
    exec(group: string, options?: Options) {
-      // Example (runs spawnSync() for each of the 4 "compile" commands):
+      // Example that runs spawnSync() for each of the 4 "compile" commands:
       //    runScripts.exec('compile', { verbose: true });
       //    [package.json]
       //       "runScriptsConfig": {
@@ -56,6 +65,39 @@ const runScripts = {
       commands.forEach((command: string, index: number) =>
          active(index + 1) && execCommand(command, index + 1));
       },
+
+   execParallel(group: string, options?: Options) {
+      const defaults = {
+         only:    null,
+         quiet:   false,
+         verbose: false,
+         };
+      const settings = { ...defaults, ...options };
+      const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
+      if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
+         throw Error('[run-scripts-util] Cannot find commands: ' + group);
+      const active = (step: number) => settings.only === null || step === settings.only;
+      const createProcess = (command: string, index: number): Promise<ProcessInfo> =>
+         new Promise((resolve) => {
+            const start = Date.now();
+            const step = index + 1;
+            const task = spawn(command, { shell: true, stdio: 'inherit' });
+            const pid =  task.pid ?? null;
+            if (settings.verbose)
+               console.log(group, step, 'PID:', pid, '→', command, active(step));
+            else if (!settings.quiet)
+               console.log(command);
+            const processInfo = (code: number, ms: number): ProcessInfo =>
+               ({ group, step, pid, start, code, ms });
+            task.on('close', (code: number) => resolve(processInfo(code, Date.now() - start)));
+            if (!settings.quiet)
+               task.on('close', (code: number) =>
+                  console.log('Done:', group, step, { pid, code }, 'ms:', Date.now() - start));
+            });
+      return Promise.all(commands.map(createProcess));
+      },
+
    };
 
 export { runScripts };

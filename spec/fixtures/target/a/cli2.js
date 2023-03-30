@@ -24,13 +24,16 @@
 // Usage from command line:
 //    $ npm install --global run-scripts-util
 //    $ run-scripts compile --quiet
+//
+// For contributors working on this project:
+//    $ npm run dev
 
 // Imports
 import { cliArgvUtil } from 'cli-argv-util';
 import { runScripts } from '../dist/run-scripts.js';
 
 // Parameters and flags
-const validFlags = ['note', 'only', 'quiet', 'verbose'];
+const validFlags = ['note', 'only', 'parallel', 'quiet', 'verbose'];
 const cli =        cliArgvUtil.parse(validFlags);
 const groups =     cli.params;  //list of script set names
 
@@ -48,4 +51,9 @@ const options = {
    quiet:   cli.flagOn.quiet,
    verbose: cli.flagOn.verbose,
    };
-groups.forEach(group => runScripts.exec(group, options));
+const runGroup = (prevPromise, nextGroup) =>
+   prevPromise.then(() => runScripts.execParallel(nextGroup, options));
+if (cli.flagOn.parallel)
+   groups.reduce(runGroup, Promise.resolve());
+else
+   groups.forEach(group => runScripts.exec(group, options));
