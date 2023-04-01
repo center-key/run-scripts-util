@@ -84,24 +84,25 @@ const runScripts = {
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
+      const logger = createLogger(settings);
       const active = (step: number) => settings.only === null || step === settings.only;
-      const createProcess = (command: string, index: number): Promise<ProcessInfo> =>
-         new Promise((resolve) => {
-            const start = Date.now();
-            const step = index + 1;
-            const task = spawn(command, { shell: true, stdio: 'inherit' });
-            const pid =  task.pid ?? null;
-            if (settings.verbose)
-               console.log(group, step, 'PID:', pid, '→', command, active(step));
-            else if (!settings.quiet)
-               console.log(command);
-            const processInfo = (code: number, ms: number): ProcessInfo =>
-               ({ group, step, pid, start, code, ms });
-            task.on('close', (code: number) => resolve(processInfo(code, Date.now() - start)));
-            if (!settings.quiet)
-               task.on('close', (code: number) =>
-                  console.log('Done:', group, step, { pid, code }, 'ms:', Date.now() - start));
-            });
+      const process = (step: number, command: string): Promise<ProcessInfo> => new Promise((resolve) => {
+         const start =    Date.now();
+         const task =     spawn(command, { shell: true, stdio: 'inherit' });
+         const pid =      task.pid ?? null;
+         const stepText = chalk.yellow(step);
+         const logItems = settings.verbose ?
+            [chalk.white(group), stepText, chalk.magenta('pid: ' + pid), arrow] : [stepText];
+         logger(...logItems, chalk.cyanBright(command));
+         const processInfo = (code: number, ms: number): ProcessInfo =>
+            ({ group, step, pid, start, code, ms });
+         task.on('close', (code: number) => resolve(processInfo(code, Date.now() - start)));
+         task.on('close', (code: number) => logger(...logItems, chalk.green('done'),
+            chalk.white(`(code: ${code}, ${Date.now() - start}ms)`)));
+         });
+      const createProcess = (command: string, index: number): Promise<ProcessInfo | null> =>
+         active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
+      logger(chalk.white(group), chalk.blue('--parallel'));
       return Promise.all(commands.map(createProcess));
       },
 

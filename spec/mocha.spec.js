@@ -75,7 +75,9 @@ describe('Correct error is thrown', () => {
 describe('Executing the CLI', () => {
 
    it('correctly runs parallel commands', () => {
-      const cmd = 'node bin/cli.js spec-b1 spec-b2 --verbose --parallel';
+      // Handy script:
+      //    "devp": "tsc && add-dist-header build dist && rimraf spec/fixtures/target/b && mocha spec/*.spec.js --grep parallel --timeout 5000",
+      const cmd = 'node bin/cli.js spec-b1 spec-b2 --parallel --verbose';
       execSync(cmd, { stdio: 'inherit' });
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/b');
       const expected = [
