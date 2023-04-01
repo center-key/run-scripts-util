@@ -1,7 +1,9 @@
 // run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
-import fs from 'fs';
+import chalk from 'chalk';
+import fs    from 'fs';
+import log   from 'fancy-log';
 
 export type Settings = {
    only:    number | null,  //execute just one command in the group (starts with 1)
@@ -17,6 +19,11 @@ export type ProcessInfo = {
    code:  number,
    ms:    number,
    };
+
+// Reporting
+const arrow = chalk.gray.bold('→');
+const createLogger = (settings: Settings) =>
+   (...args: string[]) => !settings.quiet && log(chalk.gray('run-scripts'), ...args);
 
 const runScripts = {
 
@@ -47,19 +54,19 @@ const runScripts = {
       const settings = { ...defaults, ...options };
       const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
+      const logger =   createLogger(settings);
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
       const execCommand = (command: string, step: number) => {
          const startTime = Date.now();
-         if (settings.verbose)
-            console.log(group, step, '→', command);
-         else if (!settings.quiet)
-            console.log(command);
+         if (!settings.quiet)
+            console.log();
+         const logItems = settings.verbose ? [chalk.white(group), chalk.yellow(step), arrow] : [];
+         logger(...logItems, chalk.cyanBright(command));
          const task = spawnSync(command, { shell: true, stdio: 'inherit' });
          if (task.status !== 0)
             throw Error(`[run-scripts-util] ${group} #${step}, error status: ${task.status}`);
-         if (!settings.quiet)
-            console.log(`done (${Date.now() - startTime}ms)\n`);
+         logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const active = (step: number) => settings.only === null || step === settings.only;
       commands.forEach((command: string, index: number) =>
