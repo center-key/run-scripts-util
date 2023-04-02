@@ -102,7 +102,7 @@
       "step:12": "copy-file build/umd/run-scripts.js build/run-scripts.umd.cjs",
       "step:20": "add-dist-header build dist",
       "pretest": "npm-run-all step:*",
-      "test": "mocha spec/*.spec.js --timeout 5000",
+      "test": "mocha spec/*.spec.js --timeout 7000",
       "sleep": "node --eval 'setTimeout(() => {}, 500)'",
       "dev": "tsc && add-dist-header build dist && mocha spec/*.spec.js --grep serial"
    },

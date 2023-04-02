@@ -44,6 +44,8 @@ groups (arrays) of commands to execute.
 Each group of commands is executed in order, and the commands within each group are by default
 executed in serial (synchronously) but can optionally be executed in parallel (asynchronously).
 
+![screenshot](screenshot.png)
+
 ## A) Setup
 Install package for node:
 ```shell
