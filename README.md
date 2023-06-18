@@ -104,6 +104,7 @@ Even though **run-scripts-util** is primarily intended for build scripts, the pa
 Example:
 ``` typescript
 import { runScripts } from 'run-scripts-util';
+
 const options = { quiet: false };
 runScripts.exec('compile', options);
 runScripts.execParallel('watch', options);

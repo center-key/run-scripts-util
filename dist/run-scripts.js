@@ -1,4 +1,4 @@
-//! run-scripts-util v1.1.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.1.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -26,8 +26,9 @@ const runScripts = {
             const logItems = settings.verbose ? [chalk.white(group), chalk.yellow(step), arrow] : [];
             logger(...logItems, chalk.cyanBright(command));
             const task = spawnSync(command, { shell: true, stdio: 'inherit' });
+            const errorMessage = () => `[run-scripts-util] Task: ${group} (step ${step}), Status: ${task.status}`;
             if (task.status !== 0)
-                throw Error(`[run-scripts-util] ${group} #${step}, error status: ${task.status}`);
+                throw Error(errorMessage() + '\nCommand: ' + command);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const active = (step) => settings.only === null || step === settings.only;

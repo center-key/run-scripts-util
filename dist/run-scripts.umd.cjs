@@ -1,4 +1,4 @@
-//! run-scripts-util v1.1.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.1.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -41,8 +41,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 const logItems = settings.verbose ? [chalk_1.default.white(group), chalk_1.default.yellow(step), arrow] : [];
                 logger(...logItems, chalk_1.default.cyanBright(command));
                 const task = (0, node_child_process_1.spawnSync)(command, { shell: true, stdio: 'inherit' });
+                const errorMessage = () => `[run-scripts-util] Task: ${group} (step ${step}), Status: ${task.status}`;
                 if (task.status !== 0)
-                    throw Error(`[run-scripts-util] ${group} #${step}, error status: ${task.status}`);
+                    throw Error(errorMessage() + '\nCommand: ' + command);
                 logger(...logItems, chalk_1.default.green('done'), chalk_1.default.white(`(${Date.now() - startTime}ms)`));
             };
             const active = (step) => settings.only === null || step === settings.only;
