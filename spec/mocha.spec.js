@@ -73,12 +73,13 @@ describe('Correct error is thrown', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
+   const cmd = (posix) => process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
+   const run = (posix) => execSync(cmd(posix), { stdio: 'inherit' });
 
    it('correctly runs parallel commands', () => {
       // Handy script:
       //    "devp": "tsc && add-dist-header build dist && rimraf spec/fixtures/target/b && mocha spec/*.spec.js --grep parallel --timeout 7000",
-      const cmd = 'node bin/cli.js spec-b1 spec-b2 --parallel --verbose';
-      execSync(cmd, { stdio: 'inherit' });
+      run('node bin/cli.js spec-b1 spec-b2 --parallel --verbose');
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/b');
       const expected = [
          'spec/fixtures/target/b/1/w.json',
@@ -92,8 +93,7 @@ describe('Executing the CLI', () => {
       });
 
    it('with two command groups correctly runs them in serial', () => {
-      const cmd = 'node bin/cli.js spec-c1 spec-c2 --note=hello --quiet';
-      execSync(cmd, { stdio: 'inherit' });
+      run('node bin/cli.js spec-c1 spec-c2 --note=hello --quiet');
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/c');
       const expected = [
          'spec/fixtures/target/c/2/last.txt',

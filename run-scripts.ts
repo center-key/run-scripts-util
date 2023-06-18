@@ -64,8 +64,10 @@ const runScripts = {
          const logItems = settings.verbose ? [chalk.white(group), chalk.yellow(step), arrow] : [];
          logger(...logItems, chalk.cyanBright(command));
          const task = spawnSync(command, { shell: true, stdio: 'inherit' });
+         const errorMessage = () =>
+            `[run-scripts-util] Task: ${group} (step ${step}), Status: ${task.status}`;
          if (task.status !== 0)
-            throw Error(`[run-scripts-util] ${group} #${step}, error status: ${task.status}`);
+            throw Error(errorMessage() + '\nCommand: ' + command);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const active = (step: number) => settings.only === null || step === settings.only;
