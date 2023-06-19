@@ -6,9 +6,11 @@ import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
 import { execSync } from 'node:child_process';
 import { revWebAssets } from 'rev-web-assets';
 import assert from 'assert';
+import fs     from 'fs';
 
 // Setup
 import { runScripts } from '../dist/run-scripts.js';
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('The "dist" folder', () => {
@@ -73,13 +75,16 @@ describe('Correct error is thrown', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
-   const cmd = (posix) => process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
-   const run = (posix) => execSync(cmd(posix), { stdio: 'inherit' });
+   const run = (posix) => {
+      const name =    Object.keys(pkg.bin).sort()[0];
+      const command = process.platform === 'win32' ? posix.replaceAll('\\ ', '" "') : posix;
+      execSync(command.replace(name, 'node bin/cli.js'), { stdio: 'inherit' });
+      };
 
    it('correctly runs parallel commands', () => {
       // Handy script:
       //    "devp": "tsc && add-dist-header build dist && rimraf spec/fixtures/target/b && mocha spec/*.spec.js --grep parallel --timeout 7000",
-      run('node bin/cli.js spec-b1 spec-b2 --parallel --verbose');
+      run('run-scripts spec-b1 spec-b2 --parallel --verbose');
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/b');
       const expected = [
          'spec/fixtures/target/b/1/w.json',
@@ -93,7 +98,7 @@ describe('Executing the CLI', () => {
       });
 
    it('with two command groups correctly runs them in serial', () => {
-      run('node bin/cli.js spec-c1 spec-c2 --note=hello --quiet');
+      run('run-scripts spec-c1 spec-c2 --note=hello --quiet');
       const actual = revWebAssets.readFolderRecursive('spec/fixtures/target/c');
       const expected = [
          'spec/fixtures/target/c/2/last.txt',
