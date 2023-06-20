@@ -5,15 +5,14 @@
    "license": "MIT",
    "type": "module",
    "module": "dist/run-scripts.js",
-   "main": "dist/run-scripts.umd.cjs",
+   "main": "dist/run-scripts.js",
    "types": "dist/run-scripts.d.ts",
    "files": [
       "dist"
    ],
    "exports": {
       ".": {
-         "import": "./dist/run-scripts.js",
-         "require": "./dist/run-scripts.umd.cjs"
+         "import": "./dist/run-scripts.js"
       },
       "./": "./dist/"
    },
@@ -98,8 +97,6 @@
       "step:02": "jshint . --exclude-path .gitignore",
       "step:03": "eslint --max-warnings 0 . --ext .ts",
       "step:10": "tsc",
-      "step:11": "tsc --module UMD --outDir build/umd",
-      "step:12": "copy-file build/umd/run-scripts.js build/run-scripts.umd.cjs",
       "step:20": "add-dist-header build dist",
       "pretest": "npm-run-all step:*",
       "test": "mocha spec/*.spec.js --timeout 7000",
@@ -114,8 +111,8 @@
    "devDependencies": {
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.3",
-      "@typescript-eslint/eslint-plugin": "~5.59",
-      "@typescript-eslint/parser": "~5.59",
+      "@typescript-eslint/eslint-plugin": "~5.60",
+      "@typescript-eslint/parser": "~5.60",
       "add-dist-header": "~1.0",
       "assert-deep-strict-equal": "~1.0",
       "copy-file-util": "~1.0",
