@@ -5,7 +5,6 @@ _Organize npm scripts into named groups of easy to manage commands (CLI tool des
 
 [![License:MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/center-key/run-scripts-util/blob/main/LICENSE.txt)
 [![npm](https://img.shields.io/npm/v/run-scripts-util.svg)](https://www.npmjs.com/package/run-scripts-util)
-[![Vulnerabilities](https://snyk.io/test/github/center-key/run-scripts-util/badge.svg)](https://snyk.io/test/github/center-key/run-scripts-util)
 [![Build](https://github.com/center-key/run-scripts-util/workflows/build/badge.svg)](https://github.com/center-key/run-scripts-util/actions/workflows/run-spec-on-push.yaml)
 
 **run-scripts-util** reads the `runScriptsConfig` settings in your **package.son** to get
