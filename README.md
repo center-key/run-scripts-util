@@ -89,15 +89,15 @@ Examples:
    Execute all the `lint` commands in parallel and after all the commands are finished execute
    the `watch` commands in parallel.
 
-### 5. Skip a command
+### 4. Skip a command
 To _comment out_ a command prepend a dash (`-`) to the command.
 
-In the example below, the first `tsc` command will be skipped while the `tsc --force --verbose` command will be executed:
+In the example below, the first `tsc` command will be skipped while the `tsc --verbose` command will be executed:
  ```json
 "runScriptsConfig": {
    "compile": [
       "- tsc",
-      "tsc --force --verbose",
+      "tsc --verbose",
       "lessc src/web-app/style.less build/web-app/style.css"
    ]
 }

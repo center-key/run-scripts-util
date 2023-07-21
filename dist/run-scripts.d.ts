@@ -1,4 +1,4 @@
-//! run-scripts-util v1.2.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.2.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 export type Settings = {
     only: number | null;

@@ -1,4 +1,4 @@
-//! run-scripts-util v1.2.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.2.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -19,7 +19,7 @@ const runScripts = {
         const logger = createLogger(settings);
         if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
             throw Error('[run-scripts-util] Cannot find commands: ' + group);
-        const execCommand = (command, step) => {
+        const execCommand = (step, command) => {
             const startTime = Date.now();
             if (!settings.quiet)
                 console.log();
@@ -31,8 +31,14 @@ const runScripts = {
                 throw Error(errorMessage() + '\nCommand: ' + command);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
-        const active = (step) => settings.only === null || step === settings.only;
-        commands.forEach((command, index) => active(index + 1) && execCommand(command, index + 1));
+        const skip = (step, command) => {
+            const inactive = step === settings.only;
+            const commentedOut = command.startsWith('-');
+            if (commentedOut)
+                logger(chalk.yellow('skipping'), arrow, command);
+            return inactive || commentedOut;
+        };
+        commands.forEach((command, index) => !skip(index + 1, command) && execCommand(index + 1, command));
     },
     execParallel(group, options) {
         const defaults = {
