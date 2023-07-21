@@ -70,6 +70,7 @@
    "runScriptsConfig": {
       "spec-a": [
          "copy-folder bin spec/fixtures/target/a",
+         "- echo 'This command will be skipped.'",
          "copy-file spec/fixtures/target/a/cli.js spec/fixtures/target/a/cli2.js",
          "copy-folder .github/workflows spec/fixtures/target/a"
       ],
@@ -111,13 +112,13 @@
    "devDependencies": {
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.4",
-      "@typescript-eslint/eslint-plugin": "~6.0",
-      "@typescript-eslint/parser": "~6.0",
+      "@typescript-eslint/eslint-plugin": "~6.1",
+      "@typescript-eslint/parser": "~6.1",
       "add-dist-header": "~1.1",
       "assert-deep-strict-equal": "~1.1",
       "copy-file-util": "~1.1",
       "copy-folder-util": "~1.1",
-      "eslint": "~8.44",
+      "eslint": "~8.45",
       "jshint": "~2.13",
       "mocha": "~10.2",
       "npm-run-all2": "~6.0",

@@ -64,15 +64,7 @@ Example **package.json** scripts:
    },
 ```
 
-### 2. Debug a command
-To manually run a single command, use `npx` from the terminal plus the `--only` flag.
-
-For example, to run the third command in the `compile` group by itself:
-```shell
-$ npx run-scripts compile --only=3
-```
-
-### 3. CLI flags
+### 2. CLI flags
 Command-line flags:
 | Flag         | Description                                            | Value      |
 | ------------ | ------------------------------------------------------ | ---------- |
@@ -82,7 +74,7 @@ Command-line flags:
 | `--quiet`    | Suppress informational messages.                       | N/A        |
 | `--verbose`  | Add script group name to informational messages.       | N/A        |
 
-### 4. Example CLI usage
+### 3. Example CLI usage
 Examples:
    - `run-scripts clean compile`<br>
    Execute the `clean` group of commands and then execute the `compile` group fo commands.
@@ -96,6 +88,28 @@ Examples:
    - `run-scripts lint watch --parallel`<br>
    Execute all the `lint` commands in parallel and after all the commands are finished execute
    the `watch` commands in parallel.
+
+### 5. Skip a command
+To _comment out_ a command prepend a dash (`-`) to the command.
+
+In the example below, the first `tsc` command will be skipped while the `tsc --force --verbose` command will be executed:
+ ```json
+"runScriptsConfig": {
+   "compile": [
+      "- tsc",
+      "tsc --force --verbose",
+      "lessc src/web-app/style.less build/web-app/style.css"
+   ]
+}
+```
+
+### 5. Debug a command
+To manually run a single command, use `npx` from the terminal plus the `--only` flag.
+
+For example, to run the third command in the `compile` group by itself:
+```shell
+$ npx run-scripts compile --only=3
+```
 
 ## C) Application Code
 Even though **run-scripts-util** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.

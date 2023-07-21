@@ -57,7 +57,7 @@ const runScripts = {
       const logger =   createLogger(settings);
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
          throw Error('[run-scripts-util] Cannot find commands: ' + group);
-      const execCommand = (command: string, step: number) => {
+      const execCommand = (step: number, command: string) => {
          const startTime = Date.now();
          if (!settings.quiet)
             console.log();
@@ -70,9 +70,15 @@ const runScripts = {
             throw Error(errorMessage() + '\nCommand: ' + command);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
-      const active = (step: number) => settings.only === null || step === settings.only;
+      const skip = (step: number, command: string) => {
+         const inactive =     step === settings.only;
+         const commentedOut = command.startsWith('-');
+         if (commentedOut)
+            logger(chalk.yellow('skipping'), arrow, command);
+         return inactive || commentedOut;
+         };
       commands.forEach((command: string, index: number) =>
-         active(index + 1) && execCommand(command, index + 1));
+         !skip(index + 1, command) && execCommand(index + 1, command));
       },
 
    execParallel(group: string, options?: Options) {
