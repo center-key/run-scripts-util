@@ -1,10 +1,12 @@
 // run-scripts-util ~~ MIT License
 
+// Imports
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
 import fs    from 'fs';
 import log   from 'fancy-log';
 
+// Types
 export type Settings = {
    only:    number | null,  //execute just one command in the group (starts with 1)
    quiet:   boolean,        //suppress informational messages

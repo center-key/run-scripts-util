@@ -22,8 +22,8 @@
 //    },
 //
 // Usage from command line:
-//    $ npm install --global run-scripts-util
-//    $ run-scripts compile --quiet
+//    $ npm install --save-dev run-scripts-util
+//    $ npx run-scripts compile --quiet
 //
 // For contributors working on this project:
 //    $ npm run dev
