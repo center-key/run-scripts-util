@@ -12,7 +12,6 @@ export type Settings = {
    quiet:   boolean,        //suppress informational messages
    verbose: boolean,        //add script group name to informational messages
    };
-export type Options = Partial<Settings>;
 export type ProcessInfo = {
    group: string,
    step:  number,
@@ -29,7 +28,7 @@ const createLogger = (settings: Settings) =>
 
 const runScripts = {
 
-   exec(group: string, options?: Options) {
+   exec(group: string, options?: Partial<Settings>) {
       // Example that runs spawnSync() for each of the 4 "compile" commands:
       //    runScripts.exec('compile', { verbose: true });
       //    [package.json]
@@ -63,7 +62,9 @@ const runScripts = {
          const startTime = Date.now();
          if (!settings.quiet)
             console.log();
-         const logItems = settings.verbose ? [chalk.white(group), chalk.yellow(step), arrow] : [];
+         const logItems = [chalk.white(group)];
+         if (settings.verbose)
+            logItems.push(chalk.yellow(step), arrow);
          logger(...logItems, chalk.cyanBright(command));
          const task = spawnSync(command, { shell: true, stdio: 'inherit' });
          const errorMessage = () =>
@@ -76,14 +77,14 @@ const runScripts = {
          const inactive =     step === settings.only;
          const commentedOut = command.startsWith('-');
          if (commentedOut)
-            logger(chalk.yellow('skipping'), arrow, command);
+            logger(chalk.yellow('skipping:'), command);
          return inactive || commentedOut;
          };
       commands.forEach((command: string, index: number) =>
          !skip(index + 1, command) && execCommand(index + 1, command));
       },
 
-   execParallel(group: string, options?: Options) {
+   execParallel(group: string, options?: Partial<Settings>) {
       const defaults = {
          only:    null,
          quiet:   false,
@@ -100,9 +101,9 @@ const runScripts = {
          const start =    Date.now();
          const task =     spawn(command, { shell: true, stdio: 'inherit' });
          const pid =      task.pid ?? null;
-         const stepText = chalk.yellow(step);
-         const logItems = settings.verbose ?
-            [chalk.white(group), stepText, chalk.magenta('pid: ' + pid), arrow] : [stepText];
+         const logItems = [chalk.white(group), chalk.yellow(step)];
+         if (settings.verbose)
+            logItems.push(chalk.magenta('pid: ' + pid), arrow);
          logger(...logItems, chalk.cyanBright(command));
          const processInfo = (code: number, ms: number): ProcessInfo =>
             ({ group, step, pid, start, code, ms });
