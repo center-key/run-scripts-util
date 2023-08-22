@@ -1,11 +1,10 @@
-//! run-scripts-util v1.2.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.2.2 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 export type Settings = {
     only: number | null;
     quiet: boolean;
     verbose: boolean;
 };
-export type Options = Partial<Settings>;
 export type ProcessInfo = {
     group: string;
     step: number;
@@ -15,7 +14,7 @@ export type ProcessInfo = {
     ms: number;
 };
 declare const runScripts: {
-    exec(group: string, options?: Options): void;
-    execParallel(group: string, options?: Options): Promise<(ProcessInfo | null)[]>;
+    exec(group: string, options?: Partial<Settings>): void;
+    execParallel(group: string, options?: Partial<Settings>): Promise<(ProcessInfo | null)[]>;
 };
 export { runScripts };
