@@ -34,9 +34,13 @@ describe('Library module', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has an exec() function', () => {
-      const actual =   { validate: typeof runScripts.exec };
-      const expected = { validate: 'function' };
+   it('has functions named exec() and execParallel()', () => {
+      const module = runScripts;
+      const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
+      const expected = [
+         ['exec',         'function'],
+         ['execParallel', 'function'],
+         ];
       assertDeepStrictEqual(actual, expected);
       });
 

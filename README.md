@@ -112,7 +112,7 @@ $ npx run-scripts compile --only=3
 ```
 
 ## C) Application Code
-Even though **run-scripts-util** is primarily intended for build scripts, the package can easily be used programmatically in ESM and TypeScript projects.
+Even though **run-scripts-util** is primarily intended for build scripts, the package can be used programmatically in ESM and TypeScript projects.
 
 Example:
 ``` typescript
