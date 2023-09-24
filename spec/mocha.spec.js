@@ -107,4 +107,14 @@ describe('Executing the CLI', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
+   it('correctly passes commands with quotes to the shell', () => {
+      run('run-scripts spec-d --note=quotes --verbose');
+      const actual = cliArgvUtil.readFolder('spec/fixtures/target/d');
+      const expected = [
+         'folder name with spaces',
+         'folder name with spaces/LICENSE.txt',
+         ];
+      assertDeepStrictEqual(actual, expected);
+      });
+
    });

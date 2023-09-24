@@ -20,7 +20,10 @@
       "run-scripts": "bin/cli.js",
       "run-scripts-util": "bin/cli.js"
    },
-   "repository": "github:center-key/run-scripts-util",
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/center-key/run-scripts-util.git"
+   },
    "homepage": "https://github.com/center-key/run-scripts-util",
    "bugs": "https://github.com/center-key/run-scripts-util/issues",
    "docs": "https://github.com/center-key/run-scripts-util#readme",
@@ -88,9 +91,12 @@
       ],
       "spec-c2": [
          "copy-folder --cd=spec/fixtures/target/c 1 2",
-         "copy-file --cd=spec/fixtures/target/c/2 license1.txt license2.txt",
-         "copy-file --cd=spec/fixtures/target/c/2 license2.txt last.txt",
+         "copy-file   --cd=spec/fixtures/target/c/2 license1.txt license2.txt",
+         "copy-file   --cd=spec/fixtures/target/c/2 license2.txt last.txt",
          "rimraf spec/fixtures/target/c/1 spec/fixtures/target/c/2/license*.txt"
+      ],
+      "spec-d": [
+         "copy-file 'LICENSE.txt' '--note=Comment with spaces' --folder 'spec/fixtures/target/d/folder name with spaces'"
       ]
    },
    "scripts": {
@@ -112,13 +118,13 @@
    "devDependencies": {
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.6",
-      "@typescript-eslint/eslint-plugin": "~6.6",
-      "@typescript-eslint/parser": "~6.6",
+      "@typescript-eslint/eslint-plugin": "~6.7",
+      "@typescript-eslint/parser": "~6.7",
       "add-dist-header": "~1.3",
       "assert-deep-strict-equal": "~1.1",
       "copy-file-util": "~1.1",
       "copy-folder-util": "~1.1",
-      "eslint": "~8.49",
+      "eslint": "~8.50",
       "jshint": "~2.13",
       "mocha": "~10.2",
       "npm-run-all2": "~6.0",
