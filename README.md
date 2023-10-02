@@ -17,7 +17,7 @@ groups (arrays) of commands to execute.
    "compile-ts": "tsc",
    "compile-less": "lessc src/web-app/style.less build/web-app/style.css",
    "graphics": "copy-folder src/graphics build/my-app/graphics",
-   "compile-html": "replacer src/web-app --ext=.html --pkg build/my-app",
+   "compile-html": "replacer src/web-app --ext=.html build/my-app",
    "pretest": "npm run clean && npm run compile-ts && npm run compile-less && npm run graphics && npm run compile-html",
    "test": "mocha spec"
 },
@@ -32,7 +32,7 @@ groups (arrays) of commands to execute.
       "tsc",
       "lessc src/web-app/style.less build/web-app/style.css",
       "copy-folder src/graphics build/my-app/graphics",
-      "replacer src/web-app --ext=.html --pkg build/my-app"
+      "replacer src/web-app --ext=.html build/my-app"
    ]
 },
 "scripts": {

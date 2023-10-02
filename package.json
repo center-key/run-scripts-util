@@ -1,6 +1,6 @@
 {
    "name": "run-scripts-util",
-   "version": "1.2.2",
+   "version": "1.2.3",
    "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
    "license": "MIT",
    "type": "module",
@@ -117,7 +117,7 @@
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.6",
+      "@types/node": "~20.8",
       "@typescript-eslint/eslint-plugin": "~6.7",
       "@typescript-eslint/parser": "~6.7",
       "add-dist-header": "~1.3",

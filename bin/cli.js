@@ -13,7 +13,7 @@
 //          "tsc",
 //          "lessc src/web-app/style.less build/web-app/style.css",
 //          "copy-folder src/graphics build/my-app/graphics",
-//          "replacer src/web-app --ext=.html --pkg build/my-app"
+//          "replacer src/web-app --ext=.html build/my-app"
 //       ]
 //    },
 //    "scripts": {
