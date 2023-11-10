@@ -77,17 +77,22 @@ Command-line flags:
 ### 3. Example CLI usage
 Examples:
    - `run-scripts clean compile`<br>
-   Execute the `clean` group of commands and then execute the `compile` group fo commands.
+   Executes the `clean` group of commands and then execute the `compile` group fo commands.
 
    - `run-scripts clean compile --quiet`<br>
-   Do not display information messages.
+   Does not display information messages.
+
+   - `run-scripts clean compile --quiet '--note=Listen to silence'`<br>
+   Notes are handy for adding a short comment.
 
    - `run-scripts compile --verbose --only=2`<br>
-   Execute just the second command in the `compile` group.
+   Executes just the second command in the `compile` group.
 
    - `run-scripts lint watch --parallel`<br>
-   Execute all the `lint` commands in parallel and after all the commands are finished execute
+   Executes all the `lint` commands in parallel and then after all the commands are finished executes
    the `watch` commands in parallel.
+
+_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
 ### 4. Skip a command
 To _comment out_ a command prepend a dash (`-`) to the command.
