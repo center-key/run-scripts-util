@@ -1,21 +1,15 @@
 {
    "name": "run-scripts-util",
    "version": "1.2.4",
-   "description": "Organize npm scripts into named groups of easy to manage commands (CLI tool designed for use in npm scripts)",
+   "description": "Organize npm package.json scripts into named groups of easy to manage commands (CLI tool designed for use in npm package.json scripts)",
    "license": "MIT",
    "type": "module",
    "module": "dist/run-scripts.js",
-   "main": "dist/run-scripts.js",
    "types": "dist/run-scripts.d.ts",
+   "exports": "./dist/run-scripts.js",
    "files": [
       "dist"
    ],
-   "exports": {
-      ".": {
-         "import": "./dist/run-scripts.js"
-      },
-      "./": "./dist/"
-   },
    "bin": {
       "run-scripts": "bin/cli.js",
       "run-scripts-util": "bin/cli.js"
@@ -117,9 +111,9 @@
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.10",
-      "@typescript-eslint/eslint-plugin": "~6.17",
-      "@typescript-eslint/parser": "~6.17",
+      "@types/node": "~20.11",
+      "@typescript-eslint/eslint-plugin": "~6.19",
+      "@typescript-eslint/parser": "~6.19",
       "add-dist-header": "~1.3",
       "assert-deep-strict-equal": "~1.1",
       "copy-file-util": "~1.1",
