@@ -1,4 +1,4 @@
-//! run-scripts-util v1.2.4 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.2.5 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -34,11 +34,11 @@ const runScripts = {
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const skip = (step, command) => {
-            const inactive = step === settings.only;
-            const commentedOut = command.startsWith('-');
+            const active = settings.only === null || step === settings.only;
+            const commentedOut = command.startsWith('//') || command.startsWith('-');
             if (commentedOut)
                 logger(chalk.yellow('skipping:'), command);
-            return inactive || commentedOut;
+            return !active || commentedOut;
         };
         commands.forEach((command, index) => !skip(index + 1, command) && execCommand(index + 1, command));
     },
