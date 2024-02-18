@@ -95,13 +95,13 @@ Examples:
 _**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
 ### 4. Skip a command
-To _comment out_ a command prepend a dash (`-`) to the command.
+To _comment out_ a command prepend two slashes (`//`) to the command.
 
 In the example below, the first `tsc` command will be skipped while the `tsc --verbose` command will be executed:
  ```json
 "runScriptsConfig": {
    "compile": [
-      "- tsc",
+      "//tsc",
       "tsc --verbose",
       "lessc src/web-app/style.less build/web-app/style.css"
    ]

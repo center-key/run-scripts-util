@@ -75,7 +75,7 @@ const runScripts = {
          };
       const skip = (step: number, command: string) => {
          const active =       settings.only === null || step === settings.only;
-         const commentedOut = command.startsWith('-');
+         const commentedOut = command.startsWith('//') || command.startsWith('-');  //DEPRECATED: single dash comments
          if (commentedOut)
             logger(chalk.yellow('skipping:'), command);
          return !active || commentedOut;
