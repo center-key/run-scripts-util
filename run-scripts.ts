@@ -74,11 +74,11 @@ const runScripts = {
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const skip = (step: number, command: string) => {
-         const inactive =     step === settings.only;
+         const active =       settings.only === null || step === settings.only;
          const commentedOut = command.startsWith('-');
          if (commentedOut)
             logger(chalk.yellow('skipping:'), command);
-         return inactive || commentedOut;
+         return !active || commentedOut;
          };
       commands.forEach((command: string, index: number) =>
          !skip(index + 1, command) && execCommand(index + 1, command));
