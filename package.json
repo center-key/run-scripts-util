@@ -111,18 +111,18 @@
    },
    "devDependencies": {
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.11",
-      "@typescript-eslint/eslint-plugin": "~7.0",
-      "@typescript-eslint/parser": "~7.0",
+      "@types/node": "~20.12",
+      "@typescript-eslint/eslint-plugin": "~7.9",
+      "@typescript-eslint/parser": "~7.9",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
-      "copy-file-util": "~1.1",
+      "copy-file-util": "~1.2",
       "copy-folder-util": "~1.1",
-      "eslint": "~8.56",
+      "eslint": "8.57.0",
       "jshint": "~2.13",
-      "mocha": "~10.3",
+      "mocha": "~10.4",
       "npm-run-all2": "~6.1",
       "rimraf": "~5.0",
-      "typescript": "~5.3"
+      "typescript": "~5.4"
    }
 }
