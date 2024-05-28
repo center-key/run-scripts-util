@@ -110,10 +110,9 @@
       "fancy-log": "~2.0"
    },
    "devDependencies": {
+      "@eslint/js": "~9.3",
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.12",
-      "@typescript-eslint/eslint-plugin": "~7.9",
-      "@typescript-eslint/parser": "~7.9",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",
@@ -121,8 +120,9 @@
       "eslint": "8.57.0",
       "jshint": "~2.13",
       "mocha": "~10.4",
-      "npm-run-all2": "~6.1",
+      "npm-run-all2": "~6.2",
       "rimraf": "~5.0",
-      "typescript": "~5.4"
+      "typescript": "~5.4",
+      "typescript-eslint": "~7.11"
    }
 }
