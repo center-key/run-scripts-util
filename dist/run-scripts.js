@@ -1,4 +1,4 @@
-//! run-scripts-util v1.2.5 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.2.6 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -35,7 +35,7 @@ const runScripts = {
         };
         const skip = (step, command) => {
             const active = settings.only === null || step === settings.only;
-            const commentedOut = command.startsWith('//') || command.startsWith('-');
+            const commentedOut = command.startsWith('//');
             if (commentedOut)
                 logger(chalk.yellow('skipping:'), command);
             return !active || commentedOut;

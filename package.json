@@ -1,6 +1,6 @@
 {
    "name": "run-scripts-util",
-   "version": "1.2.5",
+   "version": "1.2.6",
    "description": "Organize npm package.json scripts into named groups of easy to manage commands (CLI tool designed for use in npm package.json scripts)",
    "license": "MIT",
    "type": "module",
@@ -110,19 +110,19 @@
       "fancy-log": "~2.0"
    },
    "devDependencies": {
-      "@eslint/js": "~9.3",
+      "@eslint/js": "~9.6",
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.12",
+      "@types/node": "~20.14",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",
       "copy-folder-util": "~1.1",
       "eslint": "8.57.0",
       "jshint": "~2.13",
-      "mocha": "~10.4",
+      "mocha": "~10.5",
       "npm-run-all2": "~6.2",
       "rimraf": "~5.0",
-      "typescript": "~5.4",
-      "typescript-eslint": "~7.11"
+      "typescript": "~5.5",
+      "typescript-eslint": "~7.15"
    }
 }
