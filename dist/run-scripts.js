@@ -1,4 +1,4 @@
-//! run-scripts-util v1.2.6 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -9,6 +9,7 @@ const createLogger = (settings) => (...args) => !settings.quiet && log(chalk.gra
 const runScripts = {
     exec(group, options) {
         const defaults = {
+            continueOnError: false,
             only: null,
             quiet: false,
             verbose: false,
@@ -28,9 +29,11 @@ const runScripts = {
                 logItems.push(chalk.yellow(step), arrow);
             logger(...logItems, chalk.cyanBright(command));
             const task = spawnSync(command, { shell: true, stdio: 'inherit' });
-            const errorMessage = () => `[run-scripts-util] Task: ${group} (step ${step}), Status: ${task.status}`;
-            if (task.status !== 0)
-                throw Error(errorMessage() + '\nCommand: ' + command);
+            const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
+            if (task.status !== 0 && settings.continueOnError)
+                logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
+            if (task.status !== 0 && !settings.continueOnError)
+                throw Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const skip = (step, command) => {
@@ -44,6 +47,7 @@ const runScripts = {
     },
     execParallel(group, options) {
         const defaults = {
+            continueOnError: false,
             only: null,
             quiet: false,
             verbose: false,

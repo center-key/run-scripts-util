@@ -68,12 +68,12 @@ Example **package.json** scripts:
 Command-line flags:
 | Flag                  | Description                                                     | Value      |
 | --------------------- | ----------------------------------------------------------------| ---------- |
+| `--continue-on-error` | Do not throw an exception if a task exits with an error status. | N/A        |
 | `--note`              | Place to add a comment only for humans.                         | **string** |
 | `--only`              | Execute just one command in the group (starts with 1).          | **number** |
 | `--parallel`          | Execute all commands within each group asynchronously.          | N/A        |
 | `--quiet`             | Suppress informational messages.                                | N/A        |
 | `--verbose`           | Add script group name to informational messages.                | N/A        |
-| `--continue-on-error` | Do not throw an exception if a task exits with an error status. | N/A        |
 
 ### 3. Example CLI usage
 Examples:
