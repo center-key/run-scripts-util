@@ -118,3 +118,25 @@ describe('Executing the CLI', () => {
       });
 
    });
+
+////////////////////////////////////////////////////////////////////////////////
+describe('A task that fails due to an invalid option', () => {
+   const run = (posix) => cliArgvUtil.run(pkg, posix);
+
+   it('does not throw an exception when the CLI flag --continue-on-error is set', () => {
+      run('run-scripts spec-e --continue-on-error');
+      const actual =   cliArgvUtil.readFolder('spec/fixtures/target/e');
+      const expected = ['screenshot.png'];
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   it('throws the correct exception', () => {
+      const runBadTask = () => runScripts.exec('spec-e');
+      const exception = { message: [
+         '[run-scripts-util] Task: spec-e (step 2), Status: 1',
+         'Command: jshint . --bogus-option',
+         ].join('\n') };
+      assert.throws(runBadTask, exception);
+      });
+
+   });

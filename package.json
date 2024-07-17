@@ -91,6 +91,10 @@
       ],
       "spec-d": [
          "copy-file 'LICENSE.txt' '--note=Comment with spaces' --folder 'spec/fixtures/target/d/folder name with spaces'"
+      ],
+      "spec-e": [
+         "copy-file screenshot.png --folder spec/fixtures/target/e",
+         "jshint . --bogus-option"
       ]
    },
    "scripts": {
@@ -110,7 +114,7 @@
       "fancy-log": "~2.0"
    },
    "devDependencies": {
-      "@eslint/js": "~9.6",
+      "@eslint/js": "~9.7",
       "@types/fancy-log": "~2.0",
       "@types/node": "~20.14",
       "add-dist-header": "~1.4",
@@ -119,10 +123,10 @@
       "copy-folder-util": "~1.1",
       "eslint": "8.57.0",
       "jshint": "~2.13",
-      "mocha": "~10.5",
+      "mocha": "~10.6",
       "npm-run-all2": "~6.2",
-      "rimraf": "~5.0",
+      "rimraf": "~6.0",
       "typescript": "~5.5",
-      "typescript-eslint": "~7.15"
+      "typescript-eslint": "~7.16"
    }
 }

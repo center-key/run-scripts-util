@@ -8,9 +8,10 @@ import log   from 'fancy-log';
 
 // Types
 export type Settings = {
-   only:    number | null,  //execute just one command in the group (starts with 1)
-   quiet:   boolean,        //suppress informational messages
-   verbose: boolean,        //add script group name to informational messages
+   continueOnError: boolean,        //do not throw an exception if a task exits with an error status
+   only:            number | null,  //execute just one command in the group (starts with 1)
+   quiet:           boolean,        //suppress informational messages
+   verbose:         boolean,        //add script group name to informational messages
    };
 export type ProcessInfo = {
    group: string,
@@ -48,9 +49,10 @@ const runScripts = {
       //          "test": "mocha spec"
       //       },
       const defaults = {
-         only:    null,
-         quiet:   false,
-         verbose: false,
+         continueOnError: false,
+         only:            null,
+         quiet:           false,
+         verbose:         false,
          };
       const settings = { ...defaults, ...options };
       const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
@@ -66,11 +68,12 @@ const runScripts = {
          if (settings.verbose)
             logItems.push(chalk.yellow(step), arrow);
          logger(...logItems, chalk.cyanBright(command));
-         const task = spawnSync(command, { shell: true, stdio: 'inherit' });
-         const errorMessage = () =>
-            `[run-scripts-util] Task: ${group} (step ${step}), Status: ${task.status}`;
-         if (task.status !== 0)
-            throw Error(errorMessage() + '\nCommand: ' + command);
+         const task =         spawnSync(command, { shell: true, stdio: 'inherit' });
+         const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
+         if (task.status !== 0 && settings.continueOnError)
+            logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
+         if (task.status !== 0 && !settings.continueOnError)
+            throw Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const skip = (step: number, command: string) => {
@@ -86,9 +89,10 @@ const runScripts = {
 
    execParallel(group: string, options?: Partial<Settings>) {
       const defaults = {
-         only:    null,
-         quiet:   false,
-         verbose: false,
+         continueOnError: false,
+         only:            null,
+         quiet:           false,
+         verbose:         false,
          };
       const settings = { ...defaults, ...options };
       const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));

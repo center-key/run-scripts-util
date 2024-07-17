@@ -33,7 +33,7 @@ import { cliArgvUtil } from 'cli-argv-util';
 import { runScripts } from '../dist/run-scripts.js';
 
 // Parameters and flags
-const validFlags = ['note', 'only', 'parallel', 'quiet', 'verbose'];
+const validFlags = ['continue-on-error', 'note', 'only', 'parallel', 'quiet', 'verbose'];
 const cli =        cliArgvUtil.parse(validFlags);
 const groups =     cli.params;  //list of script set names
 
@@ -47,9 +47,10 @@ const error =
 if (error)
    throw Error('[run-scripts-util] ' + error);
 const options = {
-   only:    cli.flagOn.only ? Number(cli.flagMap.only) : null,
-   quiet:   cli.flagOn.quiet,
-   verbose: cli.flagOn.verbose,
+   continueOnError: cli.flagOn.continueOnError,
+   only:            cli.flagOn.only ? Number(cli.flagMap.only) : null,
+   quiet:           cli.flagOn.quiet,
+   verbose:         cli.flagOn.verbose,
    };
 const runGroup = (prevPromise, nextGroup) =>
    prevPromise.then(() => runScripts.execParallel(nextGroup, options));
