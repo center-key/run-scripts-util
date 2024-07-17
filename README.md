@@ -16,9 +16,9 @@ groups (arrays) of commands to execute.
    "clean": "rimraf build dist",
    "compile-ts": "tsc",
    "compile-less": "lessc src/web-app/style.less build/web-app/style.css",
-   "graphics": "copy-folder src/graphics build/my-app/graphics",
-   "compile-html": "replacer src/web-app --ext=.html build/my-app",
-   "pretest": "npm run clean && npm run compile-ts && npm run compile-less && npm run graphics && npm run compile-html",
+   "compile-html": "replacer src/web-app --ext=.html build/web-app",
+   "graphics": "copy-folder src/graphics build/web-app/graphics",
+   "pretest": "npm run clean && npm run compile-ts && npm run compile-less && npm run compile-html && npm run graphics",
    "test": "mocha spec"
 },
 ```
@@ -30,9 +30,9 @@ groups (arrays) of commands to execute.
    ],
    "compile": [
       "tsc",
-      "lessc src/web-app/style.less build/web-app/style.css",
-      "copy-folder src/graphics build/my-app/graphics",
-      "replacer src/web-app --ext=.html build/my-app"
+      "lessc       src/web-app/style.less  build/web-app/style.css",
+      "replacer    src/web-app --ext=.html build/web-app",
+      "copy-folder src/graphics            build/web-app/graphics"
    ]
 },
 "scripts": {
