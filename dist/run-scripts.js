@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.0 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
@@ -19,7 +19,7 @@ const runScripts = {
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         const logger = createLogger(settings);
         if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-            throw Error('[run-scripts-util] Cannot find commands: ' + group);
+            throw new Error('[run-scripts-util] Cannot find commands: ' + group);
         const execCommand = (step, command) => {
             const startTime = Date.now();
             if (!settings.quiet)
@@ -33,7 +33,7 @@ const runScripts = {
             if (task.status !== 0 && settings.continueOnError)
                 logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
             if (task.status !== 0 && !settings.continueOnError)
-                throw Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
+                throw new Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const skip = (step, command) => {
@@ -43,7 +43,8 @@ const runScripts = {
                 logger(chalk.yellow('skipping:'), command);
             return !active || commentedOut;
         };
-        commands.forEach((command, index) => !skip(index + 1, command) && execCommand(index + 1, command));
+        const processCommand = (command, index) => !skip(index + 1, command) && execCommand(index + 1, command);
+        commands.forEach(processCommand);
     },
     execParallel(group, options) {
         const defaults = {
@@ -56,7 +57,7 @@ const runScripts = {
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-            throw Error('[run-scripts-util] Cannot find commands: ' + group);
+            throw new Error('[run-scripts-util] Cannot find commands: ' + group);
         const logger = createLogger(settings);
         const active = (step) => settings.only === null || step === settings.only;
         const process = (step, command) => new Promise((resolve) => {
@@ -65,7 +66,7 @@ const runScripts = {
             const pid = task.pid ?? null;
             const logItems = [chalk.white(group), chalk.yellow(step)];
             if (settings.verbose)
-                logItems.push(chalk.magenta('pid: ' + pid), arrow);
+                logItems.push(chalk.magenta('pid: ' + String(pid)), arrow);
             logger(...logItems, chalk.cyanBright(command));
             const processInfo = (code, ms) => ({ group, step, pid, start, code, ms });
             task.on('close', (code) => resolve(processInfo(code, Date.now() - start)));
