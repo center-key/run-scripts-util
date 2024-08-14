@@ -21,6 +21,10 @@ export type ProcessInfo = {
    code:  number,
    ms:    number,
    };
+type Pkg = {
+   runScriptsConfig?: { [key: string]: string | { [key: string]: string[] } },
+   scripts?:          { [key: string]: string },
+   };
 
 // Reporting
 const arrow = chalk.gray.bold('→');
@@ -55,11 +59,11 @@ const runScripts = {
          verbose:         false,
          };
       const settings = { ...defaults, ...options };
-      const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       const logger =   createLogger(settings);
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-         throw Error('[run-scripts-util] Cannot find commands: ' + group);
+         throw new Error('[run-scripts-util] Cannot find commands: ' + group);
       const execCommand = (step: number, command: string) => {
          const startTime = Date.now();
          if (!settings.quiet)
@@ -73,7 +77,7 @@ const runScripts = {
          if (task.status !== 0 && settings.continueOnError)
             logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
          if (task.status !== 0 && !settings.continueOnError)
-            throw Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
+            throw new Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const skip = (step: number, command: string) => {
@@ -83,8 +87,9 @@ const runScripts = {
             logger(chalk.yellow('skipping:'), command);
          return !active || commentedOut;
          };
-      commands.forEach((command: string, index: number) =>
-         !skip(index + 1, command) && execCommand(index + 1, command));
+      const processCommand = (command: string, index: number) =>
+         !skip(index + 1, command) && execCommand(index + 1, command);
+      (<string[]>commands).forEach(processCommand);
       },
 
    execParallel(group: string, options?: Partial<Settings>) {
@@ -95,10 +100,10 @@ const runScripts = {
          verbose:         false,
          };
       const settings = { ...defaults, ...options };
-      const pkg =      JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-         throw Error('[run-scripts-util] Cannot find commands: ' + group);
+         throw new Error('[run-scripts-util] Cannot find commands: ' + group);
       const logger = createLogger(settings);
       const active = (step: number) => settings.only === null || step === settings.only;
       const process = (step: number, command: string): Promise<ProcessInfo> => new Promise((resolve) => {
@@ -107,7 +112,7 @@ const runScripts = {
          const pid =      task.pid ?? null;
          const logItems = [chalk.white(group), chalk.yellow(step)];
          if (settings.verbose)
-            logItems.push(chalk.magenta('pid: ' + pid), arrow);
+            logItems.push(chalk.magenta('pid: ' + String(pid)), arrow);
          logger(...logItems, chalk.cyanBright(command));
          const processInfo = (code: number, ms: number): ProcessInfo =>
             ({ group, step, pid, start, code, ms });
@@ -118,7 +123,7 @@ const runScripts = {
       const createProcess = (command: string, index: number): Promise<ProcessInfo | null> =>
          active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
       logger(chalk.white(group), chalk.blue('--parallel'));
-      return Promise.all(commands.map(createProcess));
+      return Promise.all((<string[]>commands).map(createProcess));
       },
 
    };

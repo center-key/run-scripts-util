@@ -1,7 +1,7 @@
 {
    "name": "run-scripts-util",
    "version": "1.3.0",
-   "description": "Organize npm package.json scripts into named groups of easy to manage commands (CLI tool designed for use in npm package.json scripts)",
+   "description": "Organize npm package.json scripts into groups of easy to manage commands (CLI tool designed for use in npm package.json scripts)",
    "license": "MIT",
    "type": "module",
    "module": "dist/run-scripts.js",
@@ -45,25 +45,6 @@
       "node": true,
       "mocha": true
    },
-   "eslintConfig": {
-      "ignorePatterns": [
-         "build",
-         "dist",
-         "node_modules"
-      ],
-      "root": true,
-      "parser": "@typescript-eslint/parser",
-      "plugins": [
-         "@typescript-eslint"
-      ],
-      "extends": [
-         "eslint:recommended",
-         "plugin:@typescript-eslint/recommended"
-      ],
-      "rules": {
-         "@typescript-eslint/no-non-null-assertion": "off"
-      }
-   },
    "runScriptsConfig": {
       "spec-a": [
          "copy-folder bin spec/fixtures/target/a",
@@ -100,7 +81,7 @@
    "scripts": {
       "step:01": "rimraf build dist spec/fixtures/target",
       "step:02": "jshint . --exclude-path .gitignore",
-      "step:03": "eslint --max-warnings 0 . --ext .ts",
+      "step:03": "eslint --max-warnings 0",
       "step:10": "tsc",
       "step:20": "add-dist-header build dist",
       "pretest": "npm-run-all step:*",
@@ -114,19 +95,19 @@
       "fancy-log": "~2.0"
    },
    "devDependencies": {
-      "@eslint/js": "~9.7",
+      "@eslint/js": "~9.9",
       "@types/fancy-log": "~2.0",
-      "@types/node": "~20.14",
+      "@types/node": "~22.2",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",
       "copy-folder-util": "~1.1",
-      "eslint": "8.57.0",
+      "eslint": "~9.9",
       "jshint": "~2.13",
-      "mocha": "~10.6",
+      "mocha": "~10.7",
       "npm-run-all2": "~6.2",
       "rimraf": "~6.0",
       "typescript": "~5.5",
-      "typescript-eslint": "~7.16"
+      "typescript-eslint": "~8.1"
    }
 }

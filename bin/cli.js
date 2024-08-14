@@ -45,7 +45,7 @@ const error =
    invalidOnlyUse ?  'The --only flag does not support multiple groups of commands.' :
    null;
 if (error)
-   throw Error('[run-scripts-util] ' + error);
+   throw new Error('[run-scripts-util] ' + error);
 const options = {
    continueOnError: cli.flagOn.continueOnError,
    only:            cli.flagOn.only ? Number(cli.flagMap.only) : null,
