@@ -90,24 +90,24 @@
       "dev": "tsc && add-dist-header build dist && mocha spec/*.spec.js --grep serial"
    },
    "dependencies": {
-      "chalk": "~5.3",
+      "chalk": "~5.4",
       "cli-argv-util": "~1.2",
       "fancy-log": "~2.0"
    },
    "devDependencies": {
-      "@eslint/js": "~9.9",
+      "@eslint/js": "~9.21",
       "@types/fancy-log": "~2.0",
-      "@types/node": "~22.3",
+      "@types/node": "~22.13",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",
       "copy-folder-util": "~1.1",
-      "eslint": "~9.9",
+      "eslint": "~9.21",
       "jshint": "~2.13",
-      "mocha": "~10.7",
-      "npm-run-all2": "~6.2",
+      "mocha": "~11.1",
+      "npm-run-all2": "~7.0",
       "rimraf": "~6.0",
-      "typescript": "~5.5",
-      "typescript-eslint": "~8.1"
+      "typescript": "~5.8",
+      "typescript-eslint": "~8.26"
    }
 }

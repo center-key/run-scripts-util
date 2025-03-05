@@ -129,7 +129,7 @@ runScripts.exec('compile', options);
 runScripts.execParallel('watch', options);
 ```
 
-See the **TypeScript Declarations** at the top of [run-scripts.ts](run-scripts.ts) for documentation.
+See the **TypeScript Declarations** at the top of [run-scripts.ts](src/run-scripts.ts) for documentation.
 
 <br>
 
