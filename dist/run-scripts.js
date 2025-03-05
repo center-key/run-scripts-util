@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.1 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.2 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
