@@ -95,19 +95,19 @@
       "fancy-log": "~2.0"
    },
    "devDependencies": {
-      "@eslint/js": "~9.21",
+      "@eslint/js": "~9.28",
       "@types/fancy-log": "~2.0",
-      "@types/node": "~22.13",
+      "@types/node": "~24.0",
       "add-dist-header": "~1.4",
       "assert-deep-strict-equal": "~1.2",
       "copy-file-util": "~1.2",
       "copy-folder-util": "~1.1",
-      "eslint": "~9.21",
+      "eslint": "~9.28",
       "jshint": "~2.13",
-      "mocha": "~11.1",
-      "npm-run-all2": "~7.0",
+      "mocha": "~11.6",
+      "npm-run-all2": "~8.0",
       "rimraf": "~6.0",
       "typescript": "~5.8",
-      "typescript-eslint": "~8.26"
+      "typescript-eslint": "~8.34"
    }
 }
