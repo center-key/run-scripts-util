@@ -23,7 +23,7 @@ const runScripts = {
         const execCommand = (step, command) => {
             const startTime = Date.now();
             if (!settings.quiet)
-                console.log();
+                console.info();
             const logItems = [chalk.white(group)];
             if (settings.verbose)
                 logItems.push(chalk.yellow(step), arrow);
