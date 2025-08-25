@@ -59,9 +59,9 @@ execute.
 
 Example **package.json** scripts:
 ```json
-   "scripts": {
-      "build": "run-scripts clean compile",
-   },
+"scripts": {
+   "build": "run-scripts clean compile",
+},
 ```
 
 ### 2. CLI flags
