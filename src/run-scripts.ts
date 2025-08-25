@@ -71,7 +71,7 @@ const runScripts = {
          const logItems = [chalk.white(group)];
          if (settings.verbose)
             logItems.push(chalk.yellow(step), arrow);
-         logger(...logItems, chalk.cyanBright(command));
+         logger(...logItems, chalk.cyanBright(command.replace(/\s+/g, ' ')));
          const task =         spawnSync(command, { shell: true, stdio: 'inherit' });
          const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
          if (task.status !== 0 && settings.continueOnError)
