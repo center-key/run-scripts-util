@@ -32,7 +32,7 @@
 import { cliArgvUtil } from 'cli-argv-util';
 import { runScripts } from '../dist/run-scripts.js';
 
-// Parameters and flags
+// Parameters and Flags
 const validFlags = ['continue-on-error', 'note', 'only', 'parallel', 'quiet', 'verbose'];
 const cli =        cliArgvUtil.parse(validFlags);
 const groups =     cli.params;  //list of script set names

@@ -75,8 +75,7 @@ Command-line flags:
 | `--quiet`             | Suppress informational messages.                                | N/A        |
 | `--verbose`           | Add script group name to informational messages.                | N/A        |
 
-### 3. Example CLI usage
-Examples:
+### 3. Examples
    - `run-scripts clean compile`<br>
    Executes the `clean` group of commands and then execute the `compile` group fo commands.
 

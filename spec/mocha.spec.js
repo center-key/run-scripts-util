@@ -34,10 +34,11 @@ describe('Library module', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has functions named exec() and execParallel()', () => {
+   it('has functions named assert(), exec(), and execParallel()', () => {
       const module = runScripts;
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
+         ['assert',       'function'],
          ['exec',         'function'],
          ['execParallel', 'function'],
          ];
@@ -52,7 +53,7 @@ describe('Calling runScripts.exec()', () => {
    it('correctly executes a group of commands', () => {
       const options = { quiet: false, verbose: false };
       runScripts.exec('spec-a', options);
-      const actual = fs.readdirSync('spec/fixtures/target/a');
+      const actual = fs.readdirSync('spec/target/a');
       const expected = [
          'cli.js',
          'cli2.js',
@@ -81,9 +82,9 @@ describe('Executing the CLI', () => {
 
    it('correctly runs parallel commands', () => {
       // Handy script:
-      //    "devp": "tsc && add-dist-header build dist && rimraf spec/fixtures/target/b && mocha spec/*.spec.js --grep parallel --timeout 7000",
+      //    "devp": "tsc && add-dist-header build dist && rimraf spec/target/b && mocha spec/*.spec.js --grep parallel --timeout 7000",
       run('run-scripts spec-b1 spec-b2 --parallel --verbose');
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/b');
+      const actual = cliArgvUtil.readFolder('spec/target/b');
       const expected = [
          '1',
          '1/w.json',
@@ -99,7 +100,7 @@ describe('Executing the CLI', () => {
 
    it('with two command groups correctly runs them in serial', () => {
       run('run-scripts spec-c1 spec-c2 --note=hello --quiet');
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/c');
+      const actual = cliArgvUtil.readFolder('spec/target/c');
       const expected = [
          '2',
          '2/last.txt',
@@ -109,7 +110,7 @@ describe('Executing the CLI', () => {
 
    it('correctly passes commands with quotes to the shell', () => {
       run('run-scripts spec-d --note=quotes --verbose');
-      const actual = cliArgvUtil.readFolder('spec/fixtures/target/d');
+      const actual = cliArgvUtil.readFolder('spec/target/d');
       const expected = [
          'folder name with spaces',
          'folder name with spaces/LICENSE.txt',
@@ -125,17 +126,16 @@ describe('A task that fails due to an invalid option', () => {
 
    it('does not throw an exception when the CLI flag --continue-on-error is set', () => {
       run('run-scripts spec-e --continue-on-error');
-      const actual =   cliArgvUtil.readFolder('spec/fixtures/target/e');
+      const actual =   cliArgvUtil.readFolder('spec/target/e');
       const expected = ['screenshot.png'];
       assertDeepStrictEqual(actual, expected);
       });
 
    it('throws the correct exception', () => {
       const runBadTask = () => runScripts.exec('spec-e');
-      const exception = { message: [
-         '[run-scripts-util] Task: spec-e (step 2), Status: 1',
-         'Command: jshint . --bogus-option',
-         ].join('\n') };
+      const exception = { message:
+         '[run-scripts-util] Task: spec-e (step 2), Status: 1, Command: jshint . --bogus-option',
+         };
       assert.throws(runBadTask, exception);
       });
 

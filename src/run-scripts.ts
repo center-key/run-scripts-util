@@ -33,6 +33,11 @@ const createLogger = (settings: Settings) =>
 
 const runScripts = {
 
+   assert(ok: unknown, message: string | null) {
+      if (!ok)
+         throw new Error(`[run-scripts-util] ${message}`);
+      },
+
    exec(group: string, options?: Partial<Settings>) {
       // Example that runs spawnSync() for each of the 4 "compile" commands:
       //    runScripts.exec('compile', { verbose: true });
@@ -52,7 +57,7 @@ const runScripts = {
       //          "pretest": "run-scripts clean compile",
       //          "test": "mocha spec"
       //       },
-      const defaults = {
+      const defaults: Settings = {
          continueOnError: false,
          only:            null,
          quiet:           false,
@@ -62,8 +67,8 @@ const runScripts = {
       const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       const logger =   createLogger(settings);
-      if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-         throw new Error('[run-scripts-util] Cannot find commands: ' + group);
+      const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+      runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
       const execCommand = (step: number, command: string) => {
          const startTime = Date.now();
          if (!settings.quiet)
@@ -76,8 +81,8 @@ const runScripts = {
          const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
          if (task.status !== 0 && settings.continueOnError)
             logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
-         if (task.status !== 0 && !settings.continueOnError)
-            throw new Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
+         const stop = task.status !== 0 && !settings.continueOnError;
+         runScripts.assert(!stop, `${errorMessage()}, Command: ${command}`);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const skip = (step: number, command: string) => {
@@ -93,7 +98,7 @@ const runScripts = {
       },
 
    execParallel(group: string, options?: Partial<Settings>) {
-      const defaults = {
+      const defaults: Settings = {
          continueOnError: false,
          only:            null,
          quiet:           false,
@@ -102,8 +107,8 @@ const runScripts = {
       const settings = { ...defaults, ...options };
       const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
-      if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-         throw new Error('[run-scripts-util] Cannot find commands: ' + group);
+      const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+      runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
       const logger = createLogger(settings);
       const active = (step: number) => settings.only === null || step === settings.only;
       const process = (step: number, command: string): Promise<ProcessInfo> => new Promise((resolve) => {
