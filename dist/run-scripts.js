@@ -1,5 +1,6 @@
-//! run-scripts-util v1.3.3 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.4 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
+import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
 import fs from 'fs';
@@ -7,6 +8,32 @@ import log from 'fancy-log';
 const arrow = chalk.gray.bold('→');
 const createLogger = (settings) => (...args) => !settings.quiet && log(chalk.gray('run-scripts'), ...args);
 const runScripts = {
+    assert(ok, message) {
+        if (!ok)
+            throw new Error(`[run-scripts-util] ${message}`);
+    },
+    cli() {
+        const validFlags = ['continue-on-error', 'note', 'only', 'parallel', 'quiet', 'verbose'];
+        const cli = cliArgvUtil.parse(validFlags);
+        const groups = cli.params;
+        const invalidOnlyUse = cli.flagOn.only && cli.paramCount !== 1;
+        const error = cli.invalidFlag ? cli.invalidFlagMsg :
+            !cli.paramCount ? 'Must provide at lease one group of commands to run.' :
+                invalidOnlyUse ? 'The --only flag does not support multiple groups of commands.' :
+                    null;
+        runScripts.assert(!error, error);
+        const options = {
+            continueOnError: cli.flagOn.continueOnError,
+            only: cli.flagOn.only ? Number(cli.flagMap.only) : null,
+            quiet: cli.flagOn.quiet,
+            verbose: cli.flagOn.verbose,
+        };
+        const runGroup = (prevPromise, nextGroup) => prevPromise.then(() => runScripts.execParallel(nextGroup, options));
+        if (cli.flagOn.parallel)
+            groups.reduce(runGroup, Promise.resolve([]));
+        else
+            groups.forEach(group => runScripts.exec(group, options));
+    },
     exec(group, options) {
         const defaults = {
             continueOnError: false,
@@ -18,8 +45,8 @@ const runScripts = {
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         const logger = createLogger(settings);
-        if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-            throw new Error('[run-scripts-util] Cannot find commands: ' + group);
+        const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+        runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
         const execCommand = (step, command) => {
             const startTime = Date.now();
             if (!settings.quiet)
@@ -32,8 +59,8 @@ const runScripts = {
             const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
             if (task.status !== 0 && settings.continueOnError)
                 logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
-            if (task.status !== 0 && !settings.continueOnError)
-                throw new Error('[run-scripts-util] ' + errorMessage() + '\nCommand: ' + command);
+            const stop = task.status !== 0 && !settings.continueOnError;
+            runScripts.assert(!stop, `${errorMessage()}, Command: ${command}`);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const skip = (step, command) => {
@@ -56,8 +83,8 @@ const runScripts = {
         const settings = { ...defaults, ...options };
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
-        if (!Array.isArray(commands) || commands.some(command => typeof command !== 'string'))
-            throw new Error('[run-scripts-util] Cannot find commands: ' + group);
+        const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+        runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
         const logger = createLogger(settings);
         const active = (step) => settings.only === null || step === settings.only;
         const process = (step, command) => new Promise((resolve) => {
