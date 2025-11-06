@@ -34,11 +34,12 @@ describe('Library module', () => {
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has functions named assert(), exec(), and execParallel()', () => {
+   it('has functions named assert(), cli(), exec(), and execParallel()', () => {
       const module = runScripts;
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
          ['assert',       'function'],
+         ['cli',          'function'],
          ['exec',         'function'],
          ['execParallel', 'function'],
          ];
