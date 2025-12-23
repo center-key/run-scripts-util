@@ -52,7 +52,15 @@ $ npm install --save-dev run-scripts-util
 ```
 
 ## B) Usage
-### 1. npm package.json scripts
+### 1. Synopsis
+```
+run-scripts [GROUP1] [GROUP2] [GROUP3] [...]
+```
+Parameters:
+Each parameter is the name of a group of individual tasks.&nbsp;
+The groups are defined in the `runScriptsConfig` object of your project's **package.json** file.
+
+### 2. npm package.json scripts
 Use `run-scripts` in the `"scripts"` section of your **package.json** file and add a
 parameter naming the key in `runScriptsConfig` holding the group (array) of commands to
 execute.
@@ -64,7 +72,7 @@ Example **package.json** scripts:
 },
 ```
 
-### 2. CLI flags
+### 3. CLI flags
 Command-line flags:
 | Flag                  | Description                                                     | Value      |
 | --------------------- | ----------------------------------------------------------------| ---------- |
@@ -75,7 +83,7 @@ Command-line flags:
 | `--quiet`             | Suppress informational messages.                                | N/A        |
 | `--verbose`           | Add script group name to informational messages.                | N/A        |
 
-### 3. Examples
+### 4. Examples
    - `run-scripts clean compile`<br>
    Executes the `clean` group of commands and then execute the `compile` group fo commands.
 
@@ -92,9 +100,10 @@ Command-line flags:
    Executes all the `lint` commands in parallel and then after all the commands are finished executes
    the `watch` commands in parallel.
 
-_**Note:** Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
+> [!NOTE]
+> _Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
-### 4. Skip a command
+### 5. Skip a command
 To _comment out_ a command prepend two slashes (`//`) to the command.
 
 In the example below, the first `tsc` command will be skipped while the `tsc --verbose` command will be executed:
@@ -108,7 +117,7 @@ In the example below, the first `tsc` command will be skipped while the `tsc --v
 }
 ```
 
-### 5. Debug a command
+### 6. Debug a command
 To manually run a single command, use `npx` from the terminal plus the `--only` flag.
 
 For example, to run the third command in the `compile` group by itself:
