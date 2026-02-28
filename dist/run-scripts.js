@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.4 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.5 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
