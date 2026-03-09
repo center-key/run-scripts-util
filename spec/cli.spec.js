@@ -1,5 +1,5 @@
 // run-scripts-util
-// Mocha Specification Suite
+// CLI Specification Suite
 
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
@@ -7,79 +7,13 @@ import { cliArgvUtil } from 'cli-argv-util';
 import assert from 'assert';
 import fs     from 'fs';
 
-// Setup
+// Setup and Utilities
 import { runScripts } from '../dist/run-scripts.js';
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-
-////////////////////////////////////////////////////////////////////////////////
-describe('The "dist" folder', () => {
-
-   it('contains the correct files', () => {
-      const actual = fs.readdirSync('dist');
-      const expected = [
-         'run-scripts.d.ts',
-         'run-scripts.js',
-         ];
-      assertDeepStrictEqual(actual, expected);
-      });
-
-   });
-
-////////////////////////////////////////////////////////////////////////////////
-describe('Library module', () => {
-
-   it('is an object', () => {
-      const actual =   { constructor: runScripts.constructor.name };
-      const expected = { constructor: 'Object' };
-      assertDeepStrictEqual(actual, expected);
-      });
-
-   it('has functions named assert(), cli(), exec(), and execParallel()', () => {
-      const module = runScripts;
-      const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
-      const expected = [
-         ['assert',       'function'],
-         ['cli',          'function'],
-         ['exec',         'function'],
-         ['execParallel', 'function'],
-         ];
-      assertDeepStrictEqual(actual, expected);
-      });
-
-   });
-
-////////////////////////////////////////////////////////////////////////////////
-describe('Calling runScripts.exec()', () => {
-
-   it('correctly executes a group of commands', () => {
-      const options = { quiet: false, verbose: false };
-      runScripts.exec('spec-a', options);
-      const actual = fs.readdirSync('spec/target/a');
-      const expected = [
-         'cli.js',
-         'cli2.js',
-         'release-on-vtag.yaml',
-         'run-spec-on-push.yaml',
-         ];
-      assertDeepStrictEqual(actual, expected);
-      });
-
-   });
-
-////////////////////////////////////////////////////////////////////////////////
-describe('Correct error is thrown', () => {
-
-   it('when a nonexistent command group is supplied', () => {
-      const makeBogusCall = () => runScripts.exec('bogus');
-      const exception =     { message: '[run-scripts-util] Cannot find commands: bogus' };
-      assert.throws(makeBogusCall, exception);
-      });
-
-   });
+const run = (posix) => cliArgvUtil.run(pkg, posix);
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('Executing the CLI', () => {
-   const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('correctly runs parallel commands', () => {
       // Handy script:
@@ -123,7 +57,6 @@ describe('Executing the CLI', () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 describe('A task that fails due to an invalid option', () => {
-   const run = (posix) => cliArgvUtil.run(pkg, posix);
 
    it('does not throw an exception when the CLI flag --continue-on-error is set', () => {
       run('run-scripts spec-e --continue-on-error');
