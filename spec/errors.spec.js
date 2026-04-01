@@ -2,7 +2,7 @@
 // Error Handling Specification Suite
 
 // Imports
-import assert from 'assert';
+import assert from 'node:assert';
 
 // Setup
 import { runScripts } from '../dist/run-scripts.js';

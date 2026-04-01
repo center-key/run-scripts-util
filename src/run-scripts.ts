@@ -28,7 +28,7 @@
 import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
 import chalk from 'chalk';
-import fs    from 'fs';
+import fs    from 'node:fs';
 import log   from 'fancy-log';
 
 // Types

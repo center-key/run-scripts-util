@@ -4,8 +4,8 @@
 // Imports
 import { assertDeepStrictEqual } from 'assert-deep-strict-equal';
 import { cliArgvUtil } from 'cli-argv-util';
-import assert from 'assert';
-import fs     from 'fs';
+import assert from 'node:assert';
+import fs     from 'node:fs';
 
 // Setup and Utilities
 import { runScripts } from '../dist/run-scripts.js';
