@@ -58,7 +58,7 @@ const createLogger = (settings: Settings) =>
 
 const runScripts = {
 
-   assert(ok: unknown, message: string | null) {
+   assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[run-scripts-util] ${message}`);
       },
@@ -73,7 +73,7 @@ const runScripts = {
          !cli.paramCount ? 'Must provide at lease one group of commands to run.' :
          invalidOnlyUse ?  'The --only flag does not support multiple groups of commands.' :
          null;
-      runScripts.assert(!error, error);
+      runScripts.assertOk(!error, error);
       const options: Settings = {
          continueOnError: cli.flagOn.continueOnError!,
          only:            cli.flagOn.only ? Number(cli.flagMap.only) : null,
@@ -118,7 +118,7 @@ const runScripts = {
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       const logger =   createLogger(settings);
       const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
-      runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
+      runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
       const execCommand = (step: number, command: string) => {
          const startTime = Date.now();
          if (!settings.quiet)
@@ -132,7 +132,7 @@ const runScripts = {
          if (task.status !== 0 && settings.continueOnError)
             logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
          const stop = task.status !== 0 && !settings.continueOnError;
-         runScripts.assert(!stop, `${errorMessage()}, Command: ${command}`);
+         runScripts.assertOk(!stop, `${errorMessage()}, Command: ${command}`);
          logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
          };
       const skip = (step: number, command: string) => {
@@ -158,7 +158,7 @@ const runScripts = {
       const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
       const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
       const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
-      runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
+      runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
       const logger = createLogger(settings);
       const active = (step: number) => settings.only === null || step === settings.only;
       const process = (step: number, command: string): Promise<ProcessInfo> => new Promise((resolve) => {
