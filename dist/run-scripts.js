@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.6 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.7 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
@@ -8,31 +8,10 @@ import log from 'fancy-log';
 const arrow = chalk.gray.bold('→');
 const createLogger = (settings) => (...args) => !settings.quiet && log(chalk.gray('run-scripts'), ...args);
 const runScripts = {
-    assert(ok, message) {
+    version: '1.3.7',
+    assertOk(ok, message) {
         if (!ok)
             throw new Error(`[run-scripts-util] ${message}`);
-    },
-    cli() {
-        const validFlags = ['continue-on-error', 'note', 'only', 'parallel', 'quiet', 'verbose'];
-        const cli = cliArgvUtil.parse(validFlags);
-        const groups = cli.params;
-        const invalidOnlyUse = cli.flagOn.only && cli.paramCount !== 1;
-        const error = cli.invalidFlag ? cli.invalidFlagMsg :
-            !cli.paramCount ? 'Must provide at lease one group of commands to run.' :
-                invalidOnlyUse ? 'The --only flag does not support multiple groups of commands.' :
-                    null;
-        runScripts.assert(!error, error);
-        const options = {
-            continueOnError: cli.flagOn.continueOnError,
-            only: cli.flagOn.only ? Number(cli.flagMap.only) : null,
-            quiet: cli.flagOn.quiet,
-            verbose: cli.flagOn.verbose,
-        };
-        const runGroup = (prevPromise, nextGroup) => prevPromise.then(() => runScripts.execParallel(nextGroup, options));
-        if (cli.flagOn.parallel)
-            groups.reduce(runGroup, Promise.resolve([]));
-        else
-            groups.forEach(group => runScripts.exec(group, options));
     },
     exec(group, options) {
         const defaults = {
@@ -46,7 +25,7 @@ const runScripts = {
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         const logger = createLogger(settings);
         const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
-        runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
+        runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
         const execCommand = (step, command) => {
             const startTime = Date.now();
             if (!settings.quiet)
@@ -60,7 +39,7 @@ const runScripts = {
             if (task.status !== 0 && settings.continueOnError)
                 logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
             const stop = task.status !== 0 && !settings.continueOnError;
-            runScripts.assert(!stop, `${errorMessage()}, Command: ${command}`);
+            runScripts.assertOk(!stop, `${errorMessage()}, Command: ${command}`);
             logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
         };
         const skip = (step, command) => {
@@ -84,7 +63,7 @@ const runScripts = {
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
-        runScripts.assert(!badGroup, 'Cannot find commands: ' + group);
+        runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
         const logger = createLogger(settings);
         const active = (step) => settings.only === null || step === settings.only;
         const process = (step, command) => new Promise((resolve) => {
@@ -102,6 +81,28 @@ const runScripts = {
         const createProcess = (command, index) => active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
         logger(chalk.white(group), chalk.blue('--parallel'));
         return Promise.all(commands.map(createProcess));
+    },
+    cli() {
+        const validFlags = ['continue-on-error', 'note', 'only', 'parallel', 'quiet', 'verbose'];
+        const cli = cliArgvUtil.parse(validFlags);
+        const groups = cli.params;
+        const invalidOnlyUse = cli.flagOn.only && cli.paramCount !== 1;
+        const error = cli.invalidFlag ? cli.invalidFlagMsg :
+            !cli.paramCount ? 'Must provide at lease one group of commands to run.' :
+                invalidOnlyUse ? 'The --only flag does not support multiple groups of commands.' :
+                    null;
+        runScripts.assertOk(!error, error);
+        const options = {
+            continueOnError: cli.flagOn.continueOnError,
+            only: cli.flagOn.only ? Number(cli.flagMap.only) : null,
+            quiet: cli.flagOn.quiet,
+            verbose: cli.flagOn.verbose,
+        };
+        const runGroup = (prevPromise, nextGroup) => prevPromise.then(() => runScripts.execParallel(nextGroup, options));
+        if (cli.flagOn.parallel)
+            groups.reduce(runGroup, Promise.resolve([]));
+        else
+            groups.forEach(group => runScripts.exec(group, options));
     },
 };
 export { runScripts };

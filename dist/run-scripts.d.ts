@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.6 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.7 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 export type Settings = {
     continueOnError: boolean;
@@ -15,9 +15,10 @@ export type ProcessInfo = {
     ms: number;
 };
 declare const runScripts: {
-    assert(ok: unknown, message: string | null): void;
-    cli(): void;
+    version: string;
+    assertOk(ok: unknown, message: string | null): void;
     exec(group: string, options?: Partial<Settings>): void;
     execParallel(group: string, options?: Partial<Settings>): Promise<(ProcessInfo | null)[]>;
+    cli(): void;
 };
 export { runScripts };
