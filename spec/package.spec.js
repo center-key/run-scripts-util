@@ -23,22 +23,37 @@ describe('The "dist" folder', () => {
    });
 
 ////////////////////////////////////////////////////////////////////////////////
-describe('Library module', () => {
+describe('Library version number', () => {
 
-   it('is an object', () => {
-      const actual =   { constructor: runScripts.constructor.name };
-      const expected = { constructor: 'Object' };
+   it('follows semantic version formatting', () => {
+      const version =  runScripts.version;
+      const semVer =   /\d+[.]\d+[.]\d+/;
+      const actual =   { version: version, valid: semVer.test(version) };
+      const expected = { version: version, valid: true };
       assertDeepStrictEqual(actual, expected);
       });
 
-   it('has functions named assert(), cli(), exec(), and execParallel()', () => {
-      const module = runScripts;
+   });
+
+////////////////////////////////////////////////////////////////////////////////
+describe('Library module', () => {
+
+   const module = runScripts;
+
+   it('is exported as an object', () => {
+      const actual =   { type: typeof module };
+      const expected = { type: 'object' };
+      assertDeepStrictEqual(actual, expected);
+      });
+
+   it('has the correct properties', () => {
       const actual = Object.keys(module).sort().map(key => [key, typeof module[key]]);
       const expected = [
          ['assertOk',     'function'],
          ['cli',          'function'],
          ['exec',         'function'],
          ['execParallel', 'function'],
+         ['version',      'string'],
          ];
       assertDeepStrictEqual(actual, expected);
       });

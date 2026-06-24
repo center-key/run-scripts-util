@@ -58,6 +58,8 @@ const createLogger = (settings: Settings) =>
 
 const runScripts = {
 
+   version: '{{package.version}}',
+
    assertOk(ok: unknown, message: string | null) {
       if (!ok)
          throw new Error(`[run-scripts-util] ${message}`);
