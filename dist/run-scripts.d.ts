@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.7 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.8 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 export type Settings = {
     continueOnError: boolean;

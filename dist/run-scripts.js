@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.7 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.8 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
@@ -6,9 +6,10 @@ import chalk from 'chalk';
 import fs from 'node:fs';
 import log from 'fancy-log';
 const arrow = chalk.gray.bold('→');
-const createLogger = (settings) => (...args) => !settings.quiet && log(chalk.gray('run-scripts'), ...args);
+const name = chalk.gray('run-scripts');
+const createLogger = (settings) => (...args) => !settings.quiet && log(name, ...args);
 const runScripts = {
-    version: '1.3.7',
+    version: '1.3.8',
     assertOk(ok, message) {
         if (!ok)
             throw new Error(`[run-scripts-util] ${message}`);
@@ -24,7 +25,8 @@ const runScripts = {
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
         const logger = createLogger(settings);
-        const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+        const isNotString = (value) => typeof value !== 'string';
+        const badGroup = !Array.isArray(commands) || commands.some(isNotString);
         runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
         const execCommand = (step, command) => {
             const startTime = Date.now();
@@ -62,7 +64,8 @@ const runScripts = {
         const settings = { ...defaults, ...options };
         const pkg = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
         const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
-        const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+        const isNotString = (value) => typeof value !== 'string';
+        const badGroup = !Array.isArray(commands) || commands.some(isNotString);
         runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
         const logger = createLogger(settings);
         const active = (step) => settings.only === null || step === settings.only;
@@ -92,6 +95,14 @@ const runScripts = {
                 invalidOnlyUse ? 'The --only flag does not support multiple groups of commands.' :
                     null;
         runScripts.assertOk(!error, error);
+        const logHeader = () => {
+            const version = chalk.gray('v' + runScripts.version);
+            const summary = chalk.gray(`(groups: ${groups.length})`);
+            console.info();
+            log(name, version, chalk.white(groups.join(', ')), summary);
+        };
+        if (!cli.flagOn.quiet)
+            logHeader();
         const options = {
             continueOnError: cli.flagOn.continueOnError,
             only: cli.flagOn.only ? Number(cli.flagMap.only) : null,
