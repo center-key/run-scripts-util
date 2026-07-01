@@ -34,7 +34,7 @@ describe('Executing the CLI', () => {
       });
 
    it('with two command groups correctly runs them in serial', () => {
-      run('run-scripts spec-c1 spec-c2 --note=hello --quiet');
+      run('run-scripts spec-c1 spec-c2 --note=hello');
       const actual = cliArgvUtil.readFolder('spec/target/c');
       const expected = [
          '2',

@@ -53,8 +53,9 @@ type Pkg = {
 
 // Reporting
 const arrow = chalk.gray.bold('→');
+const name =  chalk.gray('run-scripts');
 const createLogger = (settings: Settings) =>
-   (...args: string[]) => !settings.quiet && log(chalk.gray('run-scripts'), ...args);
+   (...args: string[]) => !settings.quiet && log(name, ...args);
 
 const runScripts = {
 
@@ -90,11 +91,12 @@ const runScripts = {
          quiet:           false,
          verbose:         false,
          };
-      const settings = { ...defaults, ...options };
-      const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-      const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
-      const logger =   createLogger(settings);
-      const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+      const settings =    { ...defaults, ...options };
+      const pkg =         <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const commands =    pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
+      const logger =      createLogger(settings);
+      const isNotString = (value: unknown) => typeof value !== 'string';
+      const badGroup =    !Array.isArray(commands) || commands.some(isNotString);
       runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
       const execCommand = (step: number, command: string) => {
          const startTime = Date.now();
@@ -131,10 +133,11 @@ const runScripts = {
          quiet:           false,
          verbose:         false,
          };
-      const settings = { ...defaults, ...options };
-      const pkg =      <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
-      const commands = pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
-      const badGroup = !Array.isArray(commands) || commands.some(command => typeof command !== 'string');
+      const settings =    { ...defaults, ...options };
+      const pkg =         <Pkg>JSON.parse(fs.readFileSync('package.json', 'utf-8'));
+      const commands =    pkg.runScriptsConfig?.[group] ?? [pkg.scripts?.[group]];
+      const isNotString = (value: unknown) => typeof value !== 'string';
+      const badGroup =    !Array.isArray(commands) || commands.some(isNotString);
       runScripts.assertOk(!badGroup, 'Cannot find commands: ' + group);
       const logger = createLogger(settings);
       const active = (step: number) => settings.only === null || step === settings.only;
@@ -169,6 +172,14 @@ const runScripts = {
          invalidOnlyUse ?  'The --only flag does not support multiple groups of commands.' :
          null;
       runScripts.assertOk(!error, error);
+      const logHeader = () => {
+         const version = chalk.gray('v' + runScripts.version);
+         const summary = chalk.gray(`(groups: ${groups.length})`);
+         console.info();
+         log(name, version, chalk.white(groups.join(', ')), summary);
+         };
+      if (!cli.flagOn.quiet)
+         logHeader();
       const options: Settings = {
          continueOnError: cli.flagOn.continueOnError!,
          only:            cli.flagOn.only ? Number(cli.flagMap.only) : null,
