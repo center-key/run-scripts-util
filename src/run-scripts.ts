@@ -39,12 +39,12 @@ export type Settings = {
    verbose:         boolean,        //add script group name to informational messages
    };
 export type ProcessInfo = {
-   group: string,
-   step:  number,
-   start: number,
-   pid:   number | null,
-   code:  number,
-   ms:    number,
+   group: string,         //key name of entity in runScriptsConfig map
+   step:  number,         //position in array of commands
+   start: number,         //milliseconds timestamp
+   pid:   number | null,  //process ID
+   code:  number,         //process exit status
+   ms:    number,         //duration in milliseconds
    };
 type Pkg = {
    runScriptsConfig?: { [group: string]: string | { [command: string]: string[] } },
@@ -112,7 +112,7 @@ const runScripts = {
             logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
          const stop = task.status !== 0 && !settings.continueOnError;
          runScripts.assertOk(!stop, `${errorMessage()}, Command: ${command}`);
-         logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
+         logger(...logItems, chalk.green('done'), chalk.blue(`(${Date.now() - startTime} ms)`));
          };
       const skip = (step: number, command: string) => {
          const active =       settings.only === null || step === settings.only;
@@ -153,7 +153,7 @@ const runScripts = {
             ({ group, step, pid, start, code, ms });
          task.on('close', (code: number) => resolve(processInfo(code, Date.now() - start)));
          task.on('close', (code: number) => logger(...logItems, chalk.green('done'),
-            chalk.white(`(code: ${code}, ${Date.now() - start}ms)`)));
+            chalk.blue(`(exit code: ${code}, ${Date.now() - start} ms)`)));
          });
       const createProcess = (command: string, index: number): Promise<ProcessInfo | null> =>
          active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
@@ -174,7 +174,7 @@ const runScripts = {
       runScripts.assertOk(!error, error);
       const logHeader = () => {
          const version = chalk.gray('v' + runScripts.version);
-         const summary = chalk.gray(`(groups: ${groups.length})`);
+         const summary = chalk.blue(`(groups: ${groups.length})`);
          console.info();
          log(name, version, chalk.white(groups.join(', ')), summary);
          };
