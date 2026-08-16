@@ -1,4 +1,4 @@
-//! run-scripts-util v1.3.8 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
+//! run-scripts-util v1.3.9 ~~ https://github.com/center-key/run-scripts-util ~~ MIT License
 
 import { cliArgvUtil } from 'cli-argv-util';
 import { spawn, spawnSync } from 'node:child_process';
@@ -9,7 +9,7 @@ const arrow = chalk.gray.bold('→');
 const name = chalk.gray('run-scripts');
 const createLogger = (settings) => (...args) => !settings.quiet && log(name, ...args);
 const runScripts = {
-    version: '1.3.8',
+    version: '1.3.9',
     assertOk(ok, message) {
         if (!ok)
             throw new Error(`[run-scripts-util] ${message}`);
@@ -42,7 +42,7 @@ const runScripts = {
                 logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
             const stop = task.status !== 0 && !settings.continueOnError;
             runScripts.assertOk(!stop, `${errorMessage()}, Command: ${command}`);
-            logger(...logItems, chalk.green('done'), chalk.white(`(${Date.now() - startTime}ms)`));
+            logger(...logItems, chalk.green('done'), chalk.blue(`(${Date.now() - startTime} ms)`));
         };
         const skip = (step, command) => {
             const active = settings.only === null || step === settings.only;
@@ -79,7 +79,7 @@ const runScripts = {
             logger(...logItems, chalk.cyanBright(command));
             const processInfo = (code, ms) => ({ group, step, pid, start, code, ms });
             task.on('close', (code) => resolve(processInfo(code, Date.now() - start)));
-            task.on('close', (code) => logger(...logItems, chalk.green('done'), chalk.white(`(code: ${code}, ${Date.now() - start}ms)`)));
+            task.on('close', (code) => logger(...logItems, chalk.green('done'), chalk.blue(`(exit code: ${code}, ${Date.now() - start} ms)`)));
         });
         const createProcess = (command, index) => active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
         logger(chalk.white(group), chalk.blue('--parallel'));
@@ -97,7 +97,7 @@ const runScripts = {
         runScripts.assertOk(!error, error);
         const logHeader = () => {
             const version = chalk.gray('v' + runScripts.version);
-            const summary = chalk.gray(`(groups: ${groups.length})`);
+            const summary = chalk.blue(`(groups: ${groups.length})`);
             console.info();
             log(name, version, chalk.white(groups.join(', ')), summary);
         };
