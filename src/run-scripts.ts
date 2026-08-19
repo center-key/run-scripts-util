@@ -106,19 +106,20 @@ const runScripts = {
          if (settings.verbose)
             logItems.push(chalk.yellow(step), arrow);
          logger(...logItems, chalk.cyanBright(command.replace(/\s+/g, ' ')));
-         const task =         spawnSync(command, { shell: true, stdio: 'inherit' });
-         const errorMessage = () => `Task: ${group} (step ${step}), Status: ${task.status}`;
+         const task =    spawnSync(command, { shell: true, stdio: 'inherit' });
+         const message = `Task: ${group} (step ${step}), Status: ${task.status}`;
          if (task.status !== 0 && settings.continueOnError)
-            logger(chalk.red('ERROR'), chalk.white('-->'), errorMessage());
-         const stop = task.status !== 0 && !settings.continueOnError;
-         runScripts.assertOk(!stop, `${errorMessage()}, Command: ${command}`);
-         logger(...logItems, chalk.green('done'), chalk.blue(`(${Date.now() - startTime} ms)`));
+            logger(chalk.redBright('ERROR'), arrow, message);
+         const stop =     task.status !== 0 && !settings.continueOnError;
+         const duration = chalk.blue(`(${Date.now() - startTime}ms)`)
+         runScripts.assertOk(!stop, `${message}, Command: ${command}`);
+         logger(...logItems, chalk.green('done'), duration);
          };
       const skip = (step: number, command: string) => {
          const active =       settings.only === null || step === settings.only;
          const commentedOut = command.startsWith('//');
          if (commentedOut)
-            logger(chalk.yellow('skipping:'), command);
+            logger(chalk.yellowBright('skipping:'), command);
          return !active || commentedOut;
          };
       const processCommand = (command: string, index: number) =>
@@ -153,7 +154,7 @@ const runScripts = {
             ({ group, step, pid, start, code, ms });
          task.on('close', (code: number) => resolve(processInfo(code, Date.now() - start)));
          task.on('close', (code: number) => logger(...logItems, chalk.green('done'),
-            chalk.blue(`(exit code: ${code}, ${Date.now() - start} ms)`)));
+            chalk.blue(`(exit code: ${code}, ${Date.now() - start}ms)`)));
          });
       const createProcess = (command: string, index: number): Promise<ProcessInfo | null> =>
          active(index + 1) ? process(index + 1, command) : Promise.resolve(null);
@@ -175,8 +176,9 @@ const runScripts = {
       const logHeader = () => {
          const version = chalk.gray('v' + runScripts.version);
          const summary = chalk.blue(`(groups: ${groups.length})`);
+         const keys =    chalk.white(groups.join(', '));
          console.info();
-         log(name, version, chalk.white(groups.join(', ')), summary);
+         log(name, version, keys, summary);
          };
       if (!cli.flagOn.quiet)
          logHeader();
