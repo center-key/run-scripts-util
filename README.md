@@ -60,7 +60,7 @@ Parameters:
 Each parameter is the name of a group of individual tasks.&nbsp;
 The groups are defined in the `runScriptsConfig` object of your project's **package.json** file.
 
-### 2. npm package.json scripts
+### 2. npm `package.json` Scripts
 Use `run-scripts` in the `"scripts"` section of your **package.json** file and add a
 parameter naming the key in `runScriptsConfig` holding the group (array) of commands to
 execute.
@@ -72,7 +72,7 @@ Example **package.json** scripts:
 },
 ```
 
-### 3. CLI flags
+### 3. CLI Flags
 Command-line flags:
 | Flag                  | Description                                                     | Value      |
 | --------------------- | ----------------------------------------------------------------| ---------- |
@@ -103,7 +103,7 @@ Command-line flags:
 > [!NOTE]
 > _Single quotes in commands are normalized so they work cross-platform and avoid the errors often encountered on Microsoft Windows._
 
-### 5. Skip a command
+### 5. Skip a Command
 To _comment out_ a command prepend two slashes (`//`) to the command.
 
 In the example below, the first `tsc` command will be skipped while the `tsc --verbose` command will be executed:
@@ -117,7 +117,7 @@ In the example below, the first `tsc` command will be skipped while the `tsc --v
 }
 ```
 
-### 6. Debug a command
+### 6. Debug a Command
 To manually run a single command, use `npx` from the terminal plus the `--only` flag.
 
 For example, to run the third command in the `compile` group by itself:
